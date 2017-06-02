@@ -1,5 +1,6 @@
 import Phaser from 'phaser'
 import { centerGameObjects } from '../utils'
+import config from '../config'
 
 export default class extends Phaser.State {
   init () {}
@@ -13,8 +14,18 @@ export default class extends Phaser.State {
     //
     // load your assets
     //
-    this.load.tilemap('level', 'assets/maps/level2.json', null, Phaser.Tilemap.TILED_JSON);
-    this.load.image('gametiles', 'assets/images/tiles2.png');
+
+    // load all tilemaps and tilesheets
+    for (var key in config.levels) {
+      var tilemap = config.levels[key].tilemap;
+      this.load.tilemap(tilemap.key, tilemap.path, null, Phaser.Tilemap.TILED_JSON);
+      var tilesheets = config.levels[key].tilesheets
+      for (var sheet_key in tilesheets) {
+	var tilesheet = tilesheets[sheet_key];
+	this.load.image(tilesheet.key, tilesheet.path);
+      }
+    }
+
     this.load.spritesheet('ms', 'assets/images/metalslug_mummy37x45.png', 37, 45, 18);
   }
 

@@ -1,6 +1,7 @@
 /* globals __DEV__ */
 import Phaser from 'phaser'
 import Player from '../sprites/Player'
+import Level from '../sprites/Level'
 
 import config from '../config'
 
@@ -11,6 +12,8 @@ export default class extends Phaser.State {
   preload () {}
 
   create () {
+    this.game.physics.startSystem(Phaser.Physics.ARCADE);
+
     this.player = new Player({
       game: this.game,
       x: config.initial.start.x,
@@ -18,23 +21,16 @@ export default class extends Phaser.State {
       asset: 'ms'
     })
 
-    this.game.physics.startSystem(Phaser.Physics.ARCADE);
-    this.map = game.add.tilemap('level');
-    this.map.addTilesetImage('tiles', 'gametiles');
-
-    this.doors = this.map.createLayer('doors');
-    this.bg = this.map.createLayer('background');
-    this.bounds = this.map.createLayer('bounds');
+    var map_config = config.levels[config.initial.map]
+    console.log(map_config);
+    this.map = new Level({
+      game: this.game,
+      def: map_config
+    });
 
     this.game.add.existing(this.player)
 
-    this.water = this.map.createLayer('water');
-    this.bg = this.map.createLayer('foreground');
-
-    this.bounds.resizeWorld();
-    this.map.setCollisionBetween(1, 2000, true, 'bounds');
-
-    this.water.alpha = 0.6;
+    //this.water.alpha = 0.6;
 
     this.cursor = this.game.input.keyboard.createCursorKeys();
     this.game.input.keyboard.addKeyCapture([
@@ -54,7 +50,7 @@ export default class extends Phaser.State {
   }
 
   update() {
-    game.physics.arcade.collide(this.player, this.bounds);
+    game.physics.arcade.collide(this.player, this.map.boundaries);
     var blocked = this.player.body.blocked.down;
     if (this.cursor.left.isDown) {
       this.player.moveLeft();

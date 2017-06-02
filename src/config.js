@@ -1,6 +1,6 @@
 export default {
-  gameWidth: 760,
-  gameHeight: 400,
+  gameWidth: 20*32,
+  gameHeight: 17*32,
   localStorageName: 'phaseres6webpack',
   world: {
     gravity: 300
@@ -14,14 +14,20 @@ export default {
     groundAccel: 200,
     groundDeaccel: 2000
   },
-  maps: {
-    level2: {
-      tiles: 'assets/maps/level2.json',
-      tilesheet: 'assets/images/tiles2.png'
+  levels: {
+    level: {
+      name: 'level',
+      tilemap: {key: 'level', path: 'assets/maps/level2.json'},
+      tilesheets: {
+	tiles: {key: 'gametiles', path: 'assets/images/tiles2.png'}
+      },
+      layers: ['doors', 'background', 'bounds', 'water', 'foreground'],
+      playerLayer: 'bounds',
+      boundaries: ['bounds']
     }
   },
   initial: {
-    map: 'level2',
+    map: 'level',
     start: {
       x: 100,
       y: 60
