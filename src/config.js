@@ -23,7 +23,8 @@ export default {
       },
       layers: ['doors', 'background', 'bounds', 'water', 'foreground'],
       playerLayer: 'bounds',
-      boundaries: ['bounds']
+      boundaries: ['bounds'],
+      lights: false
     }
   },
   initial: {
