@@ -66,8 +66,8 @@
                  "name":"exit_up",
                  "properties":
                     {
-                     "entrance":"entrance_down",
-                     "map":"hallway"
+                     "entrance":"entrance_upper",
+                     "map":"island1"
                     },
                  "propertytypes":
                     {
@@ -87,8 +87,8 @@
                  "name":"exit_left",
                  "properties":
                     {
-                     "entrance":"entrance_right",
-                     "map":"hallway"
+                     "entrance":"entrance_lower",
+                     "map":"island1"
                     },
                  "propertytypes":
                     {

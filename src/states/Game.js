@@ -32,10 +32,17 @@ export default class extends Phaser.State {
       y: entranceXY[1],
       asset: 'ms'
     })
-    this.game.world.addAt(this.player, this.spriteLayerIndex);
+    this.game.world.addAt(this.player, this.spriteLayerIndex+1);
     this.game.camera.follow(this.player);
 
+    if (map_config.checkCollisionUp == false) {
+      this.player.body.checkCollision.up = false;
+      this.player.body.checkCollision.left = false;
+      this.player.body.checkCollision.right = false;
+    }
+
     this.cursor = this.game.input.keyboard.createCursorKeys();
+    this.spacebar = this.game.input.keyboard.addKey(Phaser.Keyboard.SPACEBAR);
     this.game.input.keyboard.addKeyCapture([
     	Phaser.Keyboard.LEFT,
     	Phaser.Keyboard.RIGHT,
@@ -55,6 +62,10 @@ export default class extends Phaser.State {
   trigger(x, y) {
     if (y.props.type == "exit") {
       this.warp(y.props.properties);
+    } else if (y.props.type == "door") {
+      if (this.spacebar.isDown) {
+	this.warp(y.props.properties);
+      }
     }
   }
 

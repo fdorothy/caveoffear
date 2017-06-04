@@ -24,7 +24,20 @@ export default {
       layers: ['doors', 'background', 'bounds', 'water', 'foreground'],
       playerLayer: 'bounds',
       boundaries: ['bounds'],
-      lights: false
+      lights: false,
+      checkCollisionUp: true
+    },
+    island1: {
+      name: 'island1',
+      tilemap: {key: 'island1', path: 'assets/maps/island1.json'},
+      tilesheets: {
+	island1: {key: 'gametiles', path: 'assets/images/tiles2.png'}
+      },
+      layers: ['sky', 'background', 'doors', 'bounds', 'water', 'foreground'],
+      playerLayer: 'bounds',
+      boundaries: ['bounds'],
+      lights: true,
+      checkCollisionUp: false
     },
     hallway: {
       name: 'hallway',
@@ -35,11 +48,12 @@ export default {
       layers: ['background', 'bounds', 'water', 'foreground'],
       playerLayer: 'bounds',
       boundaries: ['bounds'],
-      lights: false
+      lights: false,
+      checkCollisionUp: true
     }
   },
   state: {
-    map: 'hallway',
-    entrance: 'entrance_left'
+    map: 'island1',
+    entrance: 'game_start'
   }
 }

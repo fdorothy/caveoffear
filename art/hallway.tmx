@@ -147,14 +147,14 @@
  <objectgroup name="exits">
   <object id="1" name="exit_up" type="exit" x="865.333" y="1.33333" width="62.6667" height="28">
    <properties>
-    <property name="entrance" value="entrance_down"/>
-    <property name="map" value="hallway"/>
+    <property name="entrance" value="entrance_upper"/>
+    <property name="map" value="island1"/>
    </properties>
   </object>
   <object id="4" name="exit_left" type="exit" x="1.33333" y="519.333" width="31.3333" height="87.3333">
    <properties>
-    <property name="entrance" value="entrance_right"/>
-    <property name="map" value="hallway"/>
+    <property name="entrance" value="entrance_lower"/>
+    <property name="map" value="island1"/>
    </properties>
   </object>
   <object id="7" name="exit_right" type="exit" x="3169.33" y="519.333" width="28.6667" height="86.6667">
