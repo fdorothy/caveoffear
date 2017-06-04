@@ -27,6 +27,17 @@ export default class extends Phaser.Tilemap {
     if (this.layerMap['water']) {
       this.layerMap['water'].alpha = 0.5;
     }
+
+    this.objectGroup = this.game.add.group();
+    for (var key in this.objects) {
+      for (var obj in this.objects[key]) {
+	var props = this.objects[key][obj];
+	var rect = this.objectGroup.create(props.x, props.y, null);
+	this.game.physics.enable(rect, Phaser.Physics.ARCADE);
+	rect.body.setSize(props.width, props.height, 0, 0);
+	rect.props = props;
+      }
+    }
   }
 
   update () {

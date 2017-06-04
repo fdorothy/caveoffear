@@ -25,13 +25,21 @@ export default {
       playerLayer: 'bounds',
       boundaries: ['bounds'],
       lights: false
+    },
+    hallway: {
+      name: 'hallway',
+      tilemap: {key: 'hallway', path: 'assets/maps/hallway.json'},
+      tilesheets: {
+	cavetiles: {key: 'cavetiles', path: 'assets/images/cavetiles.png'}
+      },
+      layers: ['background', 'bounds', 'water', 'foreground'],
+      playerLayer: 'bounds',
+      boundaries: ['bounds'],
+      lights: false
     }
   },
-  initial: {
-    map: 'level',
-    start: {
-      x: 100,
-      y: 60
-    }
+  state: {
+    map: 'hallway',
+    entrance: 'entrance_left'
   }
 }

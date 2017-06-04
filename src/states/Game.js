@@ -14,14 +14,7 @@ export default class extends Phaser.State {
   create () {
     this.game.physics.startSystem(Phaser.Physics.ARCADE);
 
-    this.player = new Player({
-      game: this.game,
-      x: config.initial.start.x,
-      y: config.initial.start.y,
-      asset: 'ms'
-    })
-
-    var map_config = config.levels[config.initial.map]
+    var map_config = config.levels[config.state.map]
     this.map = new Level({
       game: this.game,
       def: map_config
@@ -32,6 +25,13 @@ export default class extends Phaser.State {
       this.spriteLayerIndex = this.map.boundaries[0].z;
     }
 
+    var entranceXY = this.getEntranceXY(config.state.entrance);
+    this.player = new Player({
+      game: this.game,
+      x: entranceXY[0],
+      y: entranceXY[1],
+      asset: 'ms'
+    })
     this.game.world.addAt(this.player, this.spriteLayerIndex);
     this.game.camera.follow(this.player);
 
@@ -52,8 +52,27 @@ export default class extends Phaser.State {
   render () {
   }
 
+  trigger(x, y) {
+    if (y.props.type == "exit") {
+      this.warp(y.props.properties);
+    }
+  }
+
+  warp(props) {
+    config.state.map = props.map;
+    config.state.entrance = props.entrance;
+    this.state.start('Warp');
+  }
+
+  getEntranceXY(entrance_name) {
+    var entrance = this.map.objects["entrances"].filter(function (x) {return x.name == entrance_name;})[0]
+    return [entrance.x+entrance.width/2.0,
+	    entrance.y+entrance.height/2.0]
+  }
+
   update() {
     game.physics.arcade.collide(this.player, this.map.boundaries);
+    game.physics.arcade.overlap(this.player, this.map.objectGroup, this.trigger, null, this);
     var blocked = this.player.body.blocked.down;
     if (this.cursor.left.isDown) {
       this.player.moveLeft();
