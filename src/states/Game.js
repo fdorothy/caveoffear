@@ -57,6 +57,7 @@ export default class extends Phaser.State {
   }
 
   render () {
+    game.debug.spriteInfo(this.player, 32, 32);
   }
 
   trigger(x, y) {
@@ -94,8 +95,11 @@ export default class extends Phaser.State {
     else if (blocked) {
       this.player.stop();
     }
+    if (this.cursor.up.downDuration(250)) {
+      this.player.startJump();
+    }
     if (this.cursor.up.isDown) {
-      this.player.jump();
+      this.player.continueJump();
     }
     if (!this.map.def.lights) {
       this.lightSprite.reset(game.camera.x, game.camera.y);

@@ -8,11 +8,12 @@ export default {
   player: {
     initialSpeed: 50,
     targetSpeed: 150,
-    targetJumpSpeed: 300,
-    jumps: 2,
-    airAccel: 100,
+    targetJumpSpeed: 320,
+    jumpAccel: 350,
+    jumpBurst: 200,
+    airAccel: 30,
     groundAccel: 200,
-    groundDeaccel: 2000
+    groundDeaccel: 500
   },
   levels: {
     level: {

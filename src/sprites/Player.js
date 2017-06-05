@@ -6,18 +6,28 @@ export default class extends Phaser.Sprite {
     super(game, x, y, asset)
     game.physics.arcade.enable(this);
     this.anchor.setTo(0.5)
-    this.jumps = config.player.jumps;
+    this.jumps = 0.0;
     this.body.collideWorldBounds = true;
     this.body.gravity.y = config.world.gravity;
     this.animations.add('walk', [0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17], 60, true);
     this.anchor.setTo(0.5, 0.5);
+    this.jumping = false;
   }
 
   update () {
     if (this.body.blocked.down) {
-      this.jumps = config.player.jumps;
+      if (this.body.velocity.x != 0.0) {
+	this.walkAnimation();
+      } else {
+	this.stopAnimation();
+      }
     } else {
       this.jumpAnimation();
+    }
+
+    if (this.body.blocked.down && this.jumping) {
+      this.jumping = false;
+      this.jumps = 0.0;
     }
   }
 
@@ -53,10 +63,21 @@ export default class extends Phaser.Sprite {
     this.walkAnimation();
   }
 
-  jump() {
-    if (this.jumps > 0) {
-      this.body.velocity.y = -config.player.targetJumpSpeed;
-      this.jumps -= 1;
+  startJump() {
+    if (this.body.blocked.down && this.jumping == false) {
+      this.jumps = config.player.jumpBurst;
+      this.body.velocity.y = -config.player.jumpBurst;
+      this.jumping = true;
+      this.body.blocked.down = false;
+    }
+  }
+
+  continueJump() {
+    if (this.jumping && this.jumps < config.player.targetJumpSpeed) {
+      var dt = this.game.time.physicsElapsed;
+      var dv = dt * config.player.jumpAccel;
+      this.body.velocity.y -= dv;
+      this.jumps += dv;
     }
   }
 
@@ -74,10 +95,8 @@ export default class extends Phaser.Sprite {
     }
     if (vx < config.player.initialSpeed && vx > -config.player.initialSpeed) {
       vx = 0;
-      this.stopAnimation();
-    } else {
-      this.stoppingAnimation();
     }
+    this.stopAnimation();
     this.body.velocity.x = vx;
   }
 

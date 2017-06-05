@@ -30,7 +30,6 @@ export default class extends Phaser.State {
   update() {
     var dt = this.game.time.physicsElapsed;
     this.totalTime -= dt;
-    console.log(this.cursor);
     if (this.totalTime <= 0.0 || this.space.isDown) {
       this.state.start('Game')
     }
