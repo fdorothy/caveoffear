@@ -9,13 +9,6 @@ export default class extends Phaser.State {
   }
 
   preload () {
-    WebFont.load({
-      google: {
-        families: ['Bangers']
-      },
-      active: this.fontsLoaded
-    })
-
     let text = this.add.text(this.world.centerX, this.world.centerY, 'loading...', { font: '16px Arial', fill: '#aaaaaa', align: 'center' })
     text.anchor.setTo(0.5, 0.5)
 
@@ -24,9 +17,9 @@ export default class extends Phaser.State {
   }
 
   render () {
-    if (this.fontsReady) {
+    //if (this.fontsReady) {
       this.state.start('Splash')
-    }
+    //}
   }
 
   fontsLoaded () {

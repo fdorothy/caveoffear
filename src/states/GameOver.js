@@ -8,7 +8,7 @@ export default class extends Phaser.State {
   create () {
     const bannerText = 'GAME OVER'
     let banner = this.add.text(this.world.centerX, this.game.height / 2.0, bannerText)
-    banner.font = 'Bangers'
+    banner.font = 'Arial'
     banner.padding.set(10, 16)
     banner.fontSize = 40
     banner.fill = '#77BFA3'

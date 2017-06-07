@@ -30,7 +30,7 @@ export default class extends Phaser.State {
       game: this.game,
       x: entranceXY[0],
       y: entranceXY[1],
-      asset: 'ms'
+      asset: 'hero'
     })
     this.game.world.addAt(this.player, this.spriteLayerIndex+1);
     this.game.camera.follow(this.player);

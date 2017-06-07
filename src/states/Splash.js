@@ -27,6 +27,8 @@ export default class extends Phaser.State {
     }
 
     this.load.spritesheet('ms', 'assets/images/metalslug_mummy37x45.png', 37, 45, 18);
+    var result = this.load.atlasJSONHash('hero', 'assets/images/hero.png', 'assets/images/hero.json');
+    console.log(result);
   }
 
   create () {

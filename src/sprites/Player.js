@@ -9,7 +9,15 @@ export default class extends Phaser.Sprite {
     this.jumps = 0.0;
     this.body.collideWorldBounds = true;
     this.body.gravity.y = config.world.gravity;
-    this.animations.add('walk', [0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17], 60, true);
+    var framenames = Phaser.Animation.generateFrameNames('run/', 0, 7);
+    this.animations.add('run', framenames, 10, true, false);
+    framenames = Phaser.Animation.generateFrameNames('idle/', 0, 11);
+    this.animations.add('idle', framenames, 10, true, false);
+    framenames = ['jump/jump.png'];
+    this.animations.add('jump', framenames, 10, true, false);
+    framenames = Phaser.Animation.generateFrameNames('freefall/', 0, 1);
+    var anim = this.animations.add('freefall', framenames, 5, true, false);
+    console.log(this.animations);
     this.anchor.setTo(0.5, 0.5);
     this.jumping = false;
   }
@@ -17,12 +25,16 @@ export default class extends Phaser.Sprite {
   update () {
     if (this.body.blocked.down) {
       if (this.body.velocity.x != 0.0) {
-	this.walkAnimation();
+    	this.walkAnimation();
       } else {
-	this.stopAnimation();
+    	this.stopAnimation();
       }
     } else {
-      this.jumpAnimation();
+      if (this.jumping) {
+	this.jumpAnimation();
+      } else {
+	this.freefallAnimation();
+      }
     }
 
     if (this.body.blocked.down && this.jumping) {
@@ -44,7 +56,6 @@ export default class extends Phaser.Sprite {
     }
     this.body.velocity.x = vx;
     this.scale.x = -1;
-    this.walkAnimation();
   }
 
   moveRight() {
@@ -60,7 +71,6 @@ export default class extends Phaser.Sprite {
     }
     this.body.velocity.x = vx;
     this.scale.x = 1;
-    this.walkAnimation();
   }
 
   startJump() {
@@ -96,26 +106,22 @@ export default class extends Phaser.Sprite {
     if (vx < config.player.initialSpeed && vx > -config.player.initialSpeed) {
       vx = 0;
     }
-    this.stopAnimation();
     this.body.velocity.x = vx;
   }
 
   walkAnimation() {
-    this.animations.play('walk');
+    this.animations.play('run');
   }
 
   stopAnimation() {
-    this.animations.stop();
-    this.frame = 4;
-  }
-
-  stoppingAnimation() {
-    this.animations.stop();
-    this.frame = 4;
+    this.animations.play('idle');
   }
 
   jumpAnimation() {
-    this.animations.stop();
-    this.frame = 0;
+    this.animations.play('jump');
+  }
+
+  freefallAnimation() {
+    this.animations.play('freefall');
   }
 }
