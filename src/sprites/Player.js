@@ -20,6 +20,8 @@ export default class extends Phaser.Sprite {
     console.log(this.animations);
     this.anchor.setTo(0.5, 0.5);
     this.jumping = false;
+    this.game.scaleModel = Phaser.ScaleManager.SHOW_ALL;
+    this.scale.setTo(config.player.scale);
   }
 
   update () {
@@ -55,7 +57,7 @@ export default class extends Phaser.Sprite {
       vx = -config.player.initialSpeed;
     }
     this.body.velocity.x = vx;
-    this.scale.x = -1;
+    this.scale.x = -config.player.scale;
   }
 
   moveRight() {
@@ -70,7 +72,7 @@ export default class extends Phaser.Sprite {
       vx = config.player.initialSpeed;
     }
     this.body.velocity.x = vx;
-    this.scale.x = 1;
+    this.scale.x = config.player.scale;
   }
 
   startJump() {

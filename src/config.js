@@ -6,6 +6,7 @@ export default {
     gravity: 300
   },
   player: {
+    scale: 1.2,
     initialSpeed: 50,
     targetSpeed: 150,
     targetJumpSpeed: 320,
