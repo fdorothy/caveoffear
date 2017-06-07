@@ -52,6 +52,18 @@ export default {
       boundaries: ['bounds'],
       lights: false,
       checkCollisionUp: true
+    },
+    drop1: {
+      name: 'drop1',
+      tilemap: {key: 'drop1', path: 'assets/maps/drop1.json'},
+      tilesheets: {
+	cavetiles: {key: 'cavetiles', path: 'assets/images/cavetiles.png'}
+      },
+      layers: ['background', 'bounds', 'foreground'],
+      playerLayer: 'bounds',
+      boundaries: ['bounds'],
+      lights: false,
+      checkCollisionUp: true
     }
   },
   state: {
