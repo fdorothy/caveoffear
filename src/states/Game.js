@@ -57,7 +57,7 @@ export default class extends Phaser.State {
   }
 
   render () {
-    game.debug.spriteInfo(this.player, 32, 32);
+    //game.debug.spriteInfo(this.player, 32, 32);
   }
 
   trigger(x, y) {
