@@ -1,6 +1,7 @@
 /* globals __DEV__ */
 import Phaser from 'phaser'
 import Player from '../sprites/Player'
+import Monster from '../sprites/Monster'
 import Level from '../sprites/Level'
 
 import config from '../config'
@@ -25,6 +26,7 @@ export default class extends Phaser.State {
       this.spriteLayerIndex = this.map.boundaries[0].z;
     }
 
+    // create and add player
     var entranceXY = this.getEntranceXY(config.state.entrance);
     this.player = new Player({
       game: this.game,
@@ -34,6 +36,24 @@ export default class extends Phaser.State {
     })
     this.game.world.addAt(this.player, this.spriteLayerIndex+1);
     this.game.camera.follow(this.player);
+
+    // create and add any monsters
+    this.monsters = this.game.add.group();
+    for (var key in this.map.objects["monsters"]) {
+      var monster = this.map.objects["monsters"][key];
+      console.log('monster ');
+      console.log(monster);
+      if (monster.type == "monster") {
+	var sprite = new Monster({
+	  game: this.game,
+	  x: monster.x + monster.width / 2.0,
+	  y: monster.y + monster.height / 2.0,
+	  info: monster.properties
+	});
+	console.log("ok, added mummy " + sprite);
+	this.monsters.add(sprite);
+      }
+    }
 
     if (map_config.checkCollisionUp == false) {
       this.player.body.checkCollision.up = false;
@@ -104,8 +124,10 @@ export default class extends Phaser.State {
 
   update() {
     game.physics.arcade.collide(this.player, this.map.boundaries);
+    game.physics.arcade.collide(this.monsters, this.map.boundaries);
     this.tooltip.text = '';
     game.physics.arcade.overlap(this.player, this.map.objectGroup, this.trigger, null, this);
+    game.physics.arcade.overlap(this.player, this.monsters, (x, y) => {this.state.start("GameOver");}, null, this);
     var blocked = this.player.body.blocked.down;
     if (this.cursor.left.isDown) {
       this.player.moveLeft();

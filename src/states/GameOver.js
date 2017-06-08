@@ -6,24 +6,24 @@ export default class extends Phaser.State {
   preload () {}
 
   create () {
-    const bannerText = 'GAME OVER'
-    let banner = this.add.text(this.world.centerX, this.game.height / 2.0, bannerText)
+    const bannerText = 'GAME OVER\nretry?'
+    let banner = this.add.text(this.game.width / 2.0, this.game.height / 2.0, bannerText)
     banner.font = 'Arial'
     banner.padding.set(10, 16)
     banner.fontSize = 40
-    banner.fill = '#77BFA3'
+    banner.fill = '#fff'
     banner.smoothed = false
     banner.anchor.setTo(0.5)
 
-    var retry = game.make.sprite(this.world.centerX, this.game.height / 2.0, 'retry');
-    retry.inputEnabled = true;
-    retry.input.priorityID = 1;
-    retry.input.useHandCursor = true;
-    retry.events.onInputDown.add(this.onretry, this);
+    //var retry = game.make.sprite(this.world.centerX, this.game.height / 2.0, 'retry');
+    banner.inputEnabled = true;
+    banner.input.priorityID = 1;
+    banner.input.useHandCursor = true;
+    banner.events.onInputDown.add(this.onretry, this);
   }
 
   onretry () {
-    this.state.start('Game');
+    this.state.start('Splash');
   }
 
 render () {

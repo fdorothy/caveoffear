@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.0" orientation="orthogonal" renderorder="right-down" width="100" height="24" tilewidth="32" tileheight="32" nextobjectid="20">
+<map version="1.0" orientation="orthogonal" renderorder="right-down" width="100" height="24" tilewidth="32" tileheight="32" nextobjectid="21">
  <tileset firstgid="1" name="cavetiles" tilewidth="32" tileheight="32" tilecount="24" columns="8">
   <image source="../assets/images/cavetiles.png" width="256" height="96"/>
   <tile id="19" probability="0.25"/>
@@ -175,5 +175,12 @@
   <object id="14" name="entrance_right" type="entrance" x="3101.33" y="531.333" width="54.6667" height="70.6667"/>
   <object id="15" name="entrance_left" type="entrance" x="47.3333" y="535.333" width="44.6667" height="64.6667"/>
   <object id="16" name="entrance_down" type="entrance" x="1028.67" y="577.333" width="38" height="71.3333"/>
+ </objectgroup>
+ <objectgroup name="monsters">
+  <object id="20" name="mummy" type="monster" x="542" y="551" width="29" height="35">
+   <properties>
+    <property name="name" value="mummy"/>
+   </properties>
+  </object>
  </objectgroup>
 </map>

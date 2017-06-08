@@ -66,6 +66,16 @@ export default {
       checkCollisionUp: true
     }
   },
+  monsters: {
+    'mummy': {
+      asset: {key: 'ms', path: 'assets/images/metalslug_mummy37x45.png'},
+      scale: 1.0,
+      initialSpeed: 50,
+      targetSpeed: 75,
+      airAcceleration: 30,
+      acceleration: 200,
+    }
+  },
   state: {
     map: 'island1',
     entrance: 'game_start'
