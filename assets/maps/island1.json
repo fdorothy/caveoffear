@@ -123,12 +123,14 @@
                  "properties":
                     {
                      "entrance":"entrance_left",
-                     "map":"hallway"
+                     "map":"hallway",
+                     "tooltip":"[spacebar]"
                     },
                  "propertytypes":
                     {
                      "entrance":"string",
-                     "map":"string"
+                     "map":"string",
+                     "tooltip":"string"
                     },
                  "rotation":0,
                  "type":"door",
@@ -144,12 +146,14 @@
                  "properties":
                     {
                      "entrance":"entrance_up",
-                     "map":"hallway"
+                     "map":"hallway",
+                     "tooltip":"[spacebar]"
                     },
                  "propertytypes":
                     {
                      "entrance":"string",
-                     "map":"string"
+                     "map":"string",
+                     "tooltip":"string"
                     },
                  "rotation":0,
                  "type":"door",

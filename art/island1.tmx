@@ -217,12 +217,14 @@
    <properties>
     <property name="entrance" value="entrance_left"/>
     <property name="map" value="hallway"/>
+    <property name="tooltip" value="[spacebar]"/>
    </properties>
   </object>
   <object id="4" name="upper_cave" type="door" x="3329.67" y="321.5" width="29.6667" height="62">
    <properties>
     <property name="entrance" value="entrance_up"/>
     <property name="map" value="hallway"/>
+    <property name="tooltip" value="[spacebar]"/>
    </properties>
   </object>
  </objectgroup>

@@ -54,6 +54,16 @@ export default class extends Phaser.State {
     this.shadowTexture = this.game.add.bitmapData(this.game.width, this.game.height);
     this.lightSprite = this.game.add.image(this.game.camera.x, this.game.camera.y, this.shadowTexture);
     this.lightSprite.blendMode = Phaser.blendModes.MULTIPLY;
+    var style = {
+      font: 'bold 16px Arial',
+      fill: '#000',
+      align: 'center',
+      backgroundColor: 'rgba(255, 255, 255, 0.5)',
+      boundsAlignH: "center",
+      boundsAlignV: "middle"
+    };
+    this.tooltip = this.add.text(this.player.x, this.player.y, '', style);
+    this.tooltip.anchor.setTo(0.5, 0.5);
   }
 
   render () {
@@ -66,6 +76,16 @@ export default class extends Phaser.State {
     } else if (y.props.type == "door") {
       if (this.spacebar.isDown) {
 	this.warp(y.props.properties);
+      }
+    }
+
+    // show tooltip if available
+    if (y.props.properties) {
+      var tooltip = y.props.properties.tooltip;
+      if (tooltip != null) {
+	this.tooltip.text = tooltip;
+	this.tooltip.x = y.x + y.width / 2.0;
+	this.tooltip.y = y.y;
       }
     }
   }
@@ -84,6 +104,7 @@ export default class extends Phaser.State {
 
   update() {
     game.physics.arcade.collide(this.player, this.map.boundaries);
+    this.tooltip.text = '';
     game.physics.arcade.overlap(this.player, this.map.objectGroup, this.trigger, null, this);
     var blocked = this.player.body.blocked.down;
     if (this.cursor.left.isDown) {
