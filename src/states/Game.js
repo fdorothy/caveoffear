@@ -41,8 +41,6 @@ export default class extends Phaser.State {
     this.monsters = this.game.add.group();
     for (var key in this.map.objects["monsters"]) {
       var monster = this.map.objects["monsters"][key];
-      console.log('monster ');
-      console.log(monster);
       if (monster.type == "monster") {
 	var sprite = new Monster({
 	  game: this.game,
@@ -50,7 +48,6 @@ export default class extends Phaser.State {
 	  y: monster.y + monster.height / 2.0,
 	  info: monster.properties
 	});
-	console.log("ok, added mummy " + sprite);
 	this.monsters.add(sprite);
       }
     }

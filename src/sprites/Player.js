@@ -17,7 +17,6 @@ export default class extends Phaser.Sprite {
     this.animations.add('jump', framenames, 10, true, false);
     framenames = Phaser.Animation.generateFrameNames('freefall/', 0, 1);
     var anim = this.animations.add('freefall', framenames, 5, true, false);
-    console.log(this.animations);
     this.anchor.setTo(0.5, 0.5);
     this.jumping = false;
     this.game.scaleModel = Phaser.ScaleManager.SHOW_ALL;
