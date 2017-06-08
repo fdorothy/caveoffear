@@ -3,15 +3,15 @@ export default {
   gameHeight: 17*32,
   localStorageName: 'phaseres6webpack',
   world: {
-    gravity: 300
+    gravity: 500
   },
   player: {
     scale: 1.2,
     initialSpeed: 50,
     targetSpeed: 150,
-    targetJumpSpeed: 320,
-    jumpAccel: 350,
-    jumpBurst: 200,
+    targetJumpSpeed: 450,
+    jumpAccel: 450,
+    jumpBurst: 250,
     airAccel: 30,
     groundAccel: 200,
     groundDeaccel: 500
