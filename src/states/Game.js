@@ -3,6 +3,7 @@ import Phaser from 'phaser'
 import Player from '../sprites/Player'
 import Monster from '../sprites/Monster'
 import Level from '../sprites/Level'
+import Item from '../sprites/Item'
 
 import config from '../config'
 
@@ -90,6 +91,11 @@ export default class extends Phaser.State {
   trigger(x, y) {
     if (y.props.type == "exit") {
       this.warp(y.props.properties);
+    } else if (y.props.type == "item") {
+      if (this.spacebar.isDown) {
+	config.state.equipped = y.props.name;
+	y.destroy();
+      }
     } else if (y.props.type == "door") {
       if (this.spacebar.isDown) {
 	this.warp(y.props.properties);
@@ -122,6 +128,8 @@ export default class extends Phaser.State {
   update() {
     game.physics.arcade.collide(this.player, this.map.boundaries);
     game.physics.arcade.collide(this.monsters, this.map.boundaries);
+    game.physics.arcade.collide(this.items, this.map.boundaries);
+    game.physics.arcade.collide(this.map.objectGroup, this.map.boundaries);
     this.tooltip.text = '';
     game.physics.arcade.overlap(this.player, this.map.objectGroup, this.trigger, null, this);
     game.physics.arcade.overlap(this.player, this.monsters, (x, y) => {this.state.start("GameOver");}, null, this);
@@ -154,7 +162,9 @@ export default class extends Phaser.State {
     var x = this.player.x - this.game.camera.x;
     var y = this.player.y - this.game.camera.y;
 
-    this.drawLight(x, y, 150 + game.rnd.integerInRange(1,20), 1.0);
+    if (config.state.equipped == 'flashlight') {
+      this.drawLight(x, y, 150 + game.rnd.integerInRange(1,20), 1.0);
+    }
   }
 
   drawLight(x, y, radius, brightness) {

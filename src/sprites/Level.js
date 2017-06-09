@@ -1,5 +1,6 @@
 import Phaser from 'phaser'
 import config from '../config'
+import Item from './Item'
 
 export default class extends Phaser.Tilemap {
   constructor ({ game, def }) {
@@ -32,10 +33,21 @@ export default class extends Phaser.Tilemap {
     for (var key in this.objects) {
       for (var obj in this.objects[key]) {
 	var props = this.objects[key][obj];
-	var rect = this.objectGroup.create(props.x, props.y, null);
-	this.game.physics.enable(rect, Phaser.Physics.ARCADE);
-	rect.body.setSize(props.width, props.height, 0, 0);
-	rect.props = props;
+	if (props.type == "item") {
+	  var sprite = new Item({
+	    game: this.game,
+	    x: props.x + props.width / 2.0,
+	    y: props.y + props.height / 2.0,
+	    name: props.name
+	  });
+	  sprite.props = props
+	  this.objectGroup.add(sprite);
+	} else {
+	  var rect = this.objectGroup.create(props.x, props.y, null);
+	  this.game.physics.enable(rect, Phaser.Physics.ARCADE);
+	  rect.body.setSize(props.width, props.height, 0, 0);
+	  rect.props = props;
+	}
       }
     }
   }

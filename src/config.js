@@ -1,6 +1,4 @@
 export default {
-  gameWidth: 20*32,
-  gameHeight: 17*32,
   localStorageName: 'phaseres6webpack',
   world: {
     gravity: 500
@@ -76,8 +74,16 @@ export default {
       acceleration: 200,
     }
   },
+  items: {
+    flashlight: 'assets/images/flashlight.png',
+    fire: 'assets/images/fire.png',
+    flaregun: 'assets/images/flaregun.png',
+    gold: 'assets/images/gold.png',
+    radio: 'assets/images/radio.png'
+  },
   state: {
     map: 'island1',
-    entrance: 'game_start'
+    entrance: 'game_start',
+    equipped: null
   }
 }

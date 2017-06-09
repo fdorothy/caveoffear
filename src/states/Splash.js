@@ -26,6 +26,12 @@ export default class extends Phaser.State {
       }
     }
 
+    for (var key in config.items) {
+      var asset = config.items[key];
+      this.load.image(key, asset);
+    }
+
+    this.load.image('diamond', 'assets/images/diamond.png');
     this.load.spritesheet('ms', 'assets/images/metalslug_mummy37x45.png', 37, 45, 18);
     var result = this.load.atlasJSONHash('hero', 'assets/images/hero.png', 'assets/images/hero.json');
 

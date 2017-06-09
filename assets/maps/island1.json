@@ -180,8 +180,39 @@
          "width":200,
          "x":0,
          "y":0
+        }, 
+        {
+         "draworder":"topdown",
+         "height":30,
+         "name":"items",
+         "objects":[
+                {
+                 "height":30,
+                 "id":11,
+                 "name":"flashlight",
+                 "properties":
+                    {
+                     "tooltip":"flashlight\n[spacebar]"
+                    },
+                 "propertytypes":
+                    {
+                     "tooltip":"string"
+                    },
+                 "rotation":0,
+                 "type":"item",
+                 "visible":true,
+                 "width":29,
+                 "x":3054,
+                 "y":509
+                }],
+         "opacity":1,
+         "type":"objectgroup",
+         "visible":true,
+         "width":200,
+         "x":0,
+         "y":0
         }],
- "nextobjectid":11,
+ "nextobjectid":12,
  "orientation":"orthogonal",
  "renderorder":"right-down",
  "tileheight":32,
