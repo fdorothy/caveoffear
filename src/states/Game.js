@@ -73,6 +73,7 @@ export default class extends Phaser.State {
 
     this.cursor = this.game.input.keyboard.createCursorKeys();
     this.spacebar = this.game.input.keyboard.addKey(Phaser.Keyboard.SPACEBAR);
+    this.dropkey = this.game.input.keyboard.addKey(Phaser.Keyboard.D);
     this.game.input.keyboard.addKeyCapture([
     	Phaser.Keyboard.LEFT,
     	Phaser.Keyboard.RIGHT,
@@ -106,6 +107,7 @@ export default class extends Phaser.State {
     sprite.props = {name: name, type: "item", properties: {tooltip: name + "\n[spacebar]"}}
     this.items.add(sprite);
     this.updateItemState(sprite);
+    return sprite;
   }
 
   updateItemState(sprite) {
@@ -120,6 +122,15 @@ export default class extends Phaser.State {
     config.state.equipped = sprite.props.name;
     sprite.destroy();
     config.state.items[sprite.props.name] = "equipped";
+  }
+
+  dropItem() {
+    if (config.state.equipped != null) {
+      var sprite = this.spawnItem(config.state.equipped, this.player.x, this.player.y);
+      sprite.body.velocity.x = 100;
+      this.game.add.tween(sprite.body.velocity).to({x: 0}, 1200, Phaser.Easing.Linear.None, true);
+      config.state.equipped = null;
+    }
   }
 
   render () {
@@ -201,6 +212,9 @@ export default class extends Phaser.State {
     }
     if (this.cursor.up.isDown) {
       this.player.continueJump();
+    }
+    if (this.dropkey.isDown) {
+      this.dropItem();
     }
     if (this.map.properties.dark) {
       this.lightSprite.reset(game.camera.x, game.camera.y);
