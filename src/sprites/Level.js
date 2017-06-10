@@ -3,9 +3,8 @@ import config from '../config'
 import Item from './Item'
 
 export default class extends Phaser.Tilemap {
-  constructor ({ game, mapInfo }) {
-    super(game, mapInfo.name)
-    this.mapInfo = mapInfo
+  constructor ({ game, asset }) {
+    super(game, asset)
 
     for (var i in this.tilesets) {
       key = this.tilesets[i].name;
@@ -32,9 +31,11 @@ export default class extends Phaser.Tilemap {
     this.items = this.game.add.group();
     this.triggers = [];
     this.objectGroup = this.game.add.group();
+    this.objectMap = {}
     for (var key in this.objects) {
       for (var obj in this.objects[key]) {
 	var props = this.objects[key][obj];
+	this.objectMap[props.name] = props;
 	var sprite;
 	if (props.type == "item") {
 	  sprite = new Item({

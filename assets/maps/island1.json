@@ -224,10 +224,16 @@
  "orientation":"orthogonal",
  "properties":
     {
+     "dark":false,
+     "name":"island",
+     "platforms":true,
      "spriteLayer":"bounds"
     },
  "propertytypes":
     {
+     "dark":"bool",
+     "name":"string",
+     "platforms":"bool",
      "spriteLayer":"string"
     },
  "renderorder":"right-down",

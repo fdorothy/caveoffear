@@ -382,6 +382,18 @@
         }],
  "nextobjectid":29,
  "orientation":"orthogonal",
+ "properties":
+    {
+     "dark":true,
+     "name":"hallway",
+     "spriteLayer":"bounds"
+    },
+ "propertytypes":
+    {
+     "dark":"bool",
+     "name":"string",
+     "spriteLayer":"string"
+    },
  "renderorder":"right-down",
  "tileheight":32,
  "tilesets":[

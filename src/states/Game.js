@@ -16,10 +16,9 @@ export default class extends Phaser.State {
   create () {
     this.game.physics.startSystem(Phaser.Physics.ARCADE);
 
-    var mapInfo = config.levels[config.state.map];
     this.map = new Level({
       game: this.game,
-      mapInfo: mapInfo
+      asset: config.state.map
     });
 
     this.spriteLayerIndex = 0;
@@ -51,12 +50,6 @@ export default class extends Phaser.State {
 	});
 	this.monsters.add(sprite);
       }
-    }
-
-    if (mapInfo.checkCollisionUp == false) {
-      this.player.body.checkCollision.up = false;
-      this.player.body.checkCollision.left = false;
-      this.player.body.checkCollision.right = false;
     }
 
     this.cursor = this.game.input.keyboard.createCursorKeys();
@@ -120,16 +113,27 @@ export default class extends Phaser.State {
   }
 
   getEntranceXY(entrance_name) {
-    var entrance = this.map.objects["entrances"].filter(function (x) {return x.name == entrance_name;})[0]
+    console.log(this.map.objectMap);
+    var entrance = this.map.objectMap[entrance_name];
     return [entrance.x+entrance.width/2.0,
 	    entrance.y+entrance.height/2.0]
   }
 
+  pushPlatformPhysics() {
+    if (this.map.properties && this.map.properties.platforms) {
+      this.player.body.checkCollision.up = false;
+      this.player.body.checkCollision.left = false;
+      this.player.body.checkCollision.right = false;
+    }
+  }
+
+  popPlatformPhysics() {
+  }
+
   update() {
-    game.physics.arcade.collide(this.player, this.map.boundaries);
-    game.physics.arcade.collide(this.monsters, this.map.boundaries);
-    game.physics.arcade.collide(this.items, this.map.boundaries);
-    game.physics.arcade.collide(this.map.items, this.map.boundaries);
+    this.pushPlatformPhysics();
+    game.physics.arcade.collide([this.player, this.monsters, this.items, this.map.items], this.map.boundaries);
+    this.popPlatformPhysics();
     this.tooltip.text = '';
     game.physics.arcade.overlap(this.player, this.map.items, this.trigger, null, this);
     game.physics.arcade.overlap(this.player, this.map.triggers, this.trigger, null, this);
@@ -150,7 +154,7 @@ export default class extends Phaser.State {
     if (this.cursor.up.isDown) {
       this.player.continueJump();
     }
-    if (!this.map.mapInfo.lights) {
+    if (this.map.properties.dark) {
       this.lightSprite.reset(game.camera.x, game.camera.y);
       this.updateShadowTexture();
     }

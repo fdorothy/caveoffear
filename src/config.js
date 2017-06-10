@@ -15,30 +15,10 @@ export default {
     groundDeaccel: 500
   },
   levels: {
-    level: {
-      name: 'level',
-      tilemap: 'assets/maps/level2.json',
-      lights: false,
-      checkCollisionUp: true
-    },
-    island1: {
-      name: 'island1',
-      tilemap: 'assets/maps/island1.json',
-      lights: true,
-      checkCollisionUp: false
-    },
-    hallway: {
-      name: 'hallway',
-      tilemap: 'assets/maps/hallway.json',
-      lights: false,
-      checkCollisionUp: true
-    },
-    drop1: {
-      name: 'drop1',
-      tilemap: 'assets/maps/drop1.json',
-      lights: false,
-      checkCollisionUp: true
-    }
+    level: 'assets/maps/level2.json',
+    island1: 'assets/maps/island1.json',
+    hallway: 'assets/maps/hallway.json',
+    drop1: 'assets/maps/drop1.json',
   },
   monsters: {
     'mummy': {

@@ -1,5 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <map version="1.0" orientation="orthogonal" renderorder="right-down" width="18" height="25" tilewidth="32" tileheight="32" nextobjectid="12">
+ <properties>
+  <property name="dark" type="bool" value="true"/>
+  <property name="name" value="drop1"/>
+  <property name="spriteLayer" value="bounds"/>
+ </properties>
  <tileset firstgid="1" name="cavetiles" tilewidth="32" tileheight="32" tilecount="24" columns="8">
   <image source="../assets/images/cavetiles.png" width="256" height="96"/>
  </tileset>
