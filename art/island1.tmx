@@ -239,6 +239,6 @@
  </objectgroup>
  <objectgroup name="monsters"/>
  <objectgroup name="items">
-  <object id="11" name="flashlight" type="item" x="3054" y="509" width="29" height="30"/>
+  <object id="11" name="flashlight" type="item_spawn" x="3054" y="509" width="29" height="30"/>
  </objectgroup>
 </map>

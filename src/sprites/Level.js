@@ -31,11 +31,13 @@ export default class extends Phaser.Tilemap {
     // load all objects
     this.triggers = [];
     this.objectGroup = this.game.add.group();
-    this.objectMap = {}
+    this.objectMap = {};
+    this.allObjects = [];
     for (var key in this.objects) {
       for (var obj in this.objects[key]) {
 	var props = this.objects[key][obj];
 	this.objectMap[props.name] = props;
+	this.allObjects.push(props);
 	var sprite = this.objectGroup.create(props.x, props.y, null);
 	this.game.physics.enable(sprite, Phaser.Physics.ARCADE);
 	sprite.body.setSize(props.width, props.height, 0, 0);

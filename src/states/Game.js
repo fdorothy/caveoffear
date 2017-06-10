@@ -37,10 +37,10 @@ export default class extends Phaser.State {
     this.game.world.addAt(this.player, this.spriteLayerIndex+1);
     this.game.camera.follow(this.player);
 
-    // create and add any monsters
+    // spawn monsters
     this.monsters = this.game.add.group();
-    for (var key in this.map.objects["monsters"]) {
-      var monster = this.map.objects["monsters"][key];
+    for (var key in this.map.allObjects) {
+      var monster = this.map.allObjects[key];
       if (monster.type == "monster") {
 	var sprite = new Monster({
 	  game: this.game,
@@ -55,10 +55,16 @@ export default class extends Phaser.State {
     // spawn items
     this.items = this.game.add.group();
     if (config.state.items == null)
-      config.state.items = [];
-    for (var key in this.map.objectMap) {
-      var obj = this.map.objectMap[key];
-      if (obj.type == "item") {
+      config.state.items = {};
+    for (var key in config.state.items) {
+      var obj = config.state.items[key];
+      if (obj != "equipped" && obj.map == this.map.asset) {
+       	this.spawnItem(key, obj.x, obj.y);
+      }
+    }
+    for (var key in this.map.allObjects) {
+      var obj = this.map.allObjects[key];
+      if (obj.type == "item_spawn") {
 	if (config.state.items[obj.name] == null) {
 	  this.spawnItem(obj.name, obj.x + obj.width/2.0, obj.y+obj.height/2.0);
 	}
@@ -104,10 +110,16 @@ export default class extends Phaser.State {
 
   updateItemState(sprite) {
     config.state.items[sprite.props.name] = {
-      map: this.map.name,
+      map: this.map.asset,
       x: sprite.x,
       y: sprite.y
     };
+  }
+
+  pickupItem(sprite) {
+    config.state.equipped = sprite.props.name;
+    sprite.destroy();
+    config.state.items[sprite.props.name] = "equipped";
   }
 
   render () {
@@ -119,8 +131,7 @@ export default class extends Phaser.State {
       this.warp(y.props.properties);
     } else if (y.props.type == "item") {
       if (this.spacebar.isDown) {
-	config.state.equipped = y.props.name;
-	y.destroy();
+	this.pickupItem(y);
       }
     } else if (y.props.type == "door") {
       if (this.spacebar.isDown) {
