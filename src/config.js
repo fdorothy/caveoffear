@@ -15,7 +15,6 @@ export default {
     groundDeaccel: 500
   },
   levels: {
-    level: 'assets/maps/level2.json',
     island1: 'assets/maps/island1.json',
     hallway: 'assets/maps/hallway.json',
     drop1: 'assets/maps/drop1.json',
@@ -43,6 +42,7 @@ export default {
   state: {
     map: 'island1',
     entrance: 'game_start',
-    equipped: null
+    equipped: null,
+    items: null
   }
 }

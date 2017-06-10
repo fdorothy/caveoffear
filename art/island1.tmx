@@ -239,11 +239,6 @@
  </objectgroup>
  <objectgroup name="monsters"/>
  <objectgroup name="items">
-  <object id="11" name="flashlight" type="item" x="3054" y="509" width="29" height="30">
-   <properties>
-    <property name="tooltip">flashlight
-[spacebar]</property>
-   </properties>
-  </object>
+  <object id="11" name="flashlight" type="item" x="3054" y="509" width="29" height="30"/>
  </objectgroup>
 </map>

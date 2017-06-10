@@ -52,6 +52,19 @@ export default class extends Phaser.State {
       }
     }
 
+    // spawn items
+    this.items = this.game.add.group();
+    if (config.state.items == null)
+      config.state.items = [];
+    for (var key in this.map.objectMap) {
+      var obj = this.map.objectMap[key];
+      if (obj.type == "item") {
+	if (config.state.items[obj.name] == null) {
+	  this.spawnItem(obj.name, obj.x + obj.width/2.0, obj.y+obj.height/2.0);
+	}
+      }
+    }
+
     this.cursor = this.game.input.keyboard.createCursorKeys();
     this.spacebar = this.game.input.keyboard.addKey(Phaser.Keyboard.SPACEBAR);
     this.game.input.keyboard.addKeyCapture([
@@ -75,6 +88,26 @@ export default class extends Phaser.State {
     };
     this.tooltip = this.add.text(this.player.x, this.player.y, '', style);
     this.tooltip.anchor.setTo(0.5, 0.5);
+  }
+
+  spawnItem(name, x, y) {
+    var sprite = new Item({
+      game: this.game,
+      x: x,
+      y: y,
+      name: name
+    });
+    sprite.props = {name: name, type: "item", properties: {tooltip: name + "\n[spacebar]"}}
+    this.items.add(sprite);
+    this.updateItemState(sprite);
+  }
+
+  updateItemState(sprite) {
+    config.state.items[sprite.props.name] = {
+      map: this.map.name,
+      x: sprite.x,
+      y: sprite.y
+    };
   }
 
   render () {
@@ -113,29 +146,33 @@ export default class extends Phaser.State {
   }
 
   getEntranceXY(entrance_name) {
-    console.log(this.map.objectMap);
     var entrance = this.map.objectMap[entrance_name];
     return [entrance.x+entrance.width/2.0,
 	    entrance.y+entrance.height/2.0]
   }
 
-  pushPlatformPhysics() {
+  pushPlatformPhysics(sprite) {
     if (this.map.properties && this.map.properties.platforms) {
-      this.player.body.checkCollision.up = false;
-      this.player.body.checkCollision.left = false;
-      this.player.body.checkCollision.right = false;
+      sprite.body.checkCollision.up = false;
+      sprite.body.checkCollision.left = false;
+      sprite.body.checkCollision.right = false;
     }
   }
 
-  popPlatformPhysics() {
+  popPlatformPhysics(sprite) {
+    if (this.map.properties && this.map.properties.platforms) {
+      sprite.body.checkCollision.up = true;
+      sprite.body.checkCollision.left = true;
+      sprite.body.checkCollision.right = true;
+    }
   }
 
   update() {
-    this.pushPlatformPhysics();
-    game.physics.arcade.collide([this.player, this.monsters, this.items, this.map.items], this.map.boundaries);
-    this.popPlatformPhysics();
+    this.pushPlatformPhysics(this.player);
+    game.physics.arcade.collide([this.player, this.monsters, this.items], this.map.boundaries);
+    this.popPlatformPhysics(this.player);
     this.tooltip.text = '';
-    game.physics.arcade.overlap(this.player, this.map.items, this.trigger, null, this);
+    game.physics.arcade.overlap(this.player, this.items, this.trigger, null, this);
     game.physics.arcade.overlap(this.player, this.map.triggers, this.trigger, null, this);
     game.physics.arcade.overlap(this.player, this.monsters, (x, y) => {this.state.start("GameOver");}, null, this);
     var blocked = this.player.body.blocked.down;

@@ -5,6 +5,7 @@ import Item from './Item'
 export default class extends Phaser.Tilemap {
   constructor ({ game, asset }) {
     super(game, asset)
+    this.asset = asset;
 
     for (var i in this.tilesets) {
       key = this.tilesets[i].name;
@@ -28,7 +29,6 @@ export default class extends Phaser.Tilemap {
     }
 
     // load all objects
-    this.items = this.game.add.group();
     this.triggers = [];
     this.objectGroup = this.game.add.group();
     this.objectMap = {}
@@ -36,23 +36,11 @@ export default class extends Phaser.Tilemap {
       for (var obj in this.objects[key]) {
 	var props = this.objects[key][obj];
 	this.objectMap[props.name] = props;
-	var sprite;
-	if (props.type == "item") {
-	  sprite = new Item({
-	    game: this.game,
-	    x: props.x + props.width / 2.0,
-	    y: props.y + props.height / 2.0,
-	    name: props.name
-	  });
-	  sprite.props = props
-	  this.items.add(sprite);
-	} else {
-	  sprite = this.objectGroup.create(props.x, props.y, null);
-	  this.game.physics.enable(sprite, Phaser.Physics.ARCADE);
-	  sprite.body.setSize(props.width, props.height, 0, 0);
-	  sprite.props = props;
-	  this.triggers.push(sprite);
-	}
+	var sprite = this.objectGroup.create(props.x, props.y, null);
+	this.game.physics.enable(sprite, Phaser.Physics.ARCADE);
+	sprite.body.setSize(props.width, props.height, 0, 0);
+	sprite.props = props;
+	this.triggers.push(sprite);
       }
     }
   }

@@ -198,14 +198,6 @@
                  "height":30,
                  "id":11,
                  "name":"flashlight",
-                 "properties":
-                    {
-                     "tooltip":"flashlight\n[spacebar]"
-                    },
-                 "propertytypes":
-                    {
-                     "tooltip":"string"
-                    },
                  "rotation":0,
                  "type":"item",
                  "visible":true,
