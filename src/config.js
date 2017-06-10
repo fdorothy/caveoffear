@@ -37,7 +37,8 @@ export default {
     radio: 'assets/images/radio.png',
     island1: 'assets/images/tiles2.png',
     cavetiles: 'assets/images/cavetiles.png',
-    diamond: 'assets/images/diamond.png'
+    diamond: 'assets/images/diamond.png',
+    starfield: 'assets/images/starfield.png',
   },
   state: {
     map: 'island1',

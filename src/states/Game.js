@@ -26,6 +26,16 @@ export default class extends Phaser.State {
       this.spriteLayerIndex = this.map.boundaries[0].z;
     }
 
+    // background if needed
+    if (!this.map.properties.dark) {
+      var result = this.game.add.tileSprite(0, 0, this.game.world.width, this.game.world.height, 'starfield');
+      result.z = -1;
+      result.tilePosition.y += 2;
+      console.log("adding starfield");
+      console.log(result);
+      this.game.world.sort();
+    }
+
     // create and add player
     var entranceXY = this.getEntranceXY(config.state.entrance);
     this.player = new Player({
@@ -86,12 +96,12 @@ export default class extends Phaser.State {
     this.lightSprite = this.game.add.image(this.game.camera.x, this.game.camera.y, this.shadowTexture);
     this.lightSprite.blendMode = Phaser.blendModes.MULTIPLY;
     var style = {
-      font: 'bold 16px Arial',
-      fill: '#000',
+      font: 'bold 16px Belgrano',
+      fill: '#222288',
       align: 'center',
-      backgroundColor: 'rgba(255, 255, 255, 0.5)',
+      backgroundColor: 'rgba(255, 255, 255, 0.2)',
       boundsAlignH: "center",
-      boundsAlignV: "middle"
+      boundsAlignV: "middle",
     };
     this.tooltip = this.add.text(this.player.x, this.player.y, '', style);
     this.tooltip.anchor.setTo(0.5, 0.5);
@@ -104,7 +114,7 @@ export default class extends Phaser.State {
       y: y,
       name: name
     });
-    sprite.props = {name: name, type: "item", properties: {tooltip: name + "\n[spacebar]"}}
+    sprite.props = {name: name, type: "item", properties: {tooltip: name}}
     this.items.add(sprite);
     this.updateItemState(sprite);
     return sprite;
@@ -156,7 +166,7 @@ export default class extends Phaser.State {
       if (tooltip != null) {
 	this.tooltip.text = tooltip;
 	this.tooltip.x = y.x + y.width / 2.0;
-	this.tooltip.y = y.y;
+	this.tooltip.y = y.y - 64;
       }
     }
   }
@@ -216,14 +226,16 @@ export default class extends Phaser.State {
     if (this.dropkey.isDown) {
       this.dropItem();
     }
-    if (this.map.properties.dark) {
-      this.lightSprite.reset(game.camera.x, game.camera.y);
-      this.updateShadowTexture();
-    }
+    this.lightSprite.reset(game.camera.x, game.camera.y);
+    this.updateShadowTexture();
   }
 
   updateShadowTexture() {
-    this.shadowTexture.context.fillStyle = 'rgb(10, 10, 10)';
+    if (this.map.properties.dark) {
+      this.shadowTexture.context.fillStyle = 'rgb(10, 10, 10)';
+    } else {
+      this.shadowTexture.context.fillStyle = 'rgb(50, 50, 50)';
+    }
     this.shadowTexture.context.fillRect(0, 0, this.game.width, this.game.height);
 
     var x = this.player.x - this.game.camera.x;

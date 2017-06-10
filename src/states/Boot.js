@@ -10,6 +10,13 @@ export default class extends Phaser.State {
   }
 
   preload () {
+    WebFont.load({
+      google: {
+	families: ['Belgrano']
+      },
+      active: this.fontsLoaded
+    });
+
     let text = this.add.text(this.world.centerX, this.world.centerY, 'loading...', { font: '16px Arial', fill: '#aaaaaa', align: 'center' })
     text.anchor.setTo(0.5, 0.5)
 

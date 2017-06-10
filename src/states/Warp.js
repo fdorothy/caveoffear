@@ -6,12 +6,6 @@ export default class extends Phaser.State {
   init () {}
 
   preload () {
-    this.loaderBg = this.add.sprite(this.game.world.centerX, this.game.world.centerY, 'loaderBg')
-    this.loaderBar = this.add.sprite(this.game.world.centerX, this.game.world.centerY, 'loaderBar')
-    centerGameObjects([this.loaderBg, this.loaderBar])
-    this.load.setPreloadSprite(this.loaderBar)
-
-    this.cursor = this.game.input.keyboard.createCursorKeys();
     this.space = this.game.input.keyboard.addKey(Phaser.Keyboard.SPACEBAR);
     this.game.input.keyboard.addKeyCapture([
     	Phaser.Keyboard.SPACEBAR
@@ -19,17 +13,22 @@ export default class extends Phaser.State {
   }
 
   create () {
-    var txt = 'entering ' + config.state.map + "\n[press space]";
+    var txt = config.state.map;
     this.text = this.add.text(
-      config.gameWidth/2.0, config.gameHeight/2.0,
-      txt, { font: '16px Arial', fill: '#aaaaaa', align: 'center' })
+      this.game.width/2.0, this.game.height/2.0,
+      txt, { font: '24px Belgrano', fill: '#aa0000', align: 'center' })
+    this.text.alpha = 0.0;
+    this.game.add.tween(this.text).to({alpha: 1}, 1000, "Linear", true);
     this.text.anchor.setTo(0.5, 0.5)
-    this.totalTime = 5.0;
+    this.totalTime = 3.0;
   }
 
   update() {
     var dt = this.game.time.physicsElapsed;
     this.totalTime -= dt;
+    if (this.totalTime <= 1.0 && this.totalTime > 0.0) {
+      this.text.alpha = this.totalTime;
+    }
     if (this.totalTime <= 0.0 || this.space.isDown) {
       this.state.start('Game')
     }
