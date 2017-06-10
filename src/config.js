@@ -17,49 +17,25 @@ export default {
   levels: {
     level: {
       name: 'level',
-      tilemap: {key: 'level', path: 'assets/maps/level2.json'},
-      tilesheets: {
-	tiles: {key: 'gametiles', path: 'assets/images/tiles2.png'}
-      },
-      layers: ['doors', 'background', 'bounds', 'water', 'foreground'],
-      playerLayer: 'bounds',
-      boundaries: ['bounds'],
+      tilemap: 'assets/maps/level2.json',
       lights: false,
       checkCollisionUp: true
     },
     island1: {
       name: 'island1',
-      tilemap: {key: 'island1', path: 'assets/maps/island1.json'},
-      tilesheets: {
-	island1: {key: 'gametiles', path: 'assets/images/tiles2.png'}
-      },
-      layers: ['sky', 'background', 'doors', 'bounds', 'water', 'foreground'],
-      playerLayer: 'bounds',
-      boundaries: ['bounds'],
+      tilemap: 'assets/maps/island1.json',
       lights: true,
       checkCollisionUp: false
     },
     hallway: {
       name: 'hallway',
-      tilemap: {key: 'hallway', path: 'assets/maps/hallway.json'},
-      tilesheets: {
-	cavetiles: {key: 'cavetiles', path: 'assets/images/cavetiles.png'}
-      },
-      layers: ['background', 'bounds', 'water', 'foreground'],
-      playerLayer: 'bounds',
-      boundaries: ['bounds'],
+      tilemap: 'assets/maps/hallway.json',
       lights: false,
       checkCollisionUp: true
     },
     drop1: {
       name: 'drop1',
-      tilemap: {key: 'drop1', path: 'assets/maps/drop1.json'},
-      tilesheets: {
-	cavetiles: {key: 'cavetiles', path: 'assets/images/cavetiles.png'}
-      },
-      layers: ['background', 'bounds', 'foreground'],
-      playerLayer: 'bounds',
-      boundaries: ['bounds'],
+      tilemap: 'assets/maps/drop1.json',
       lights: false,
       checkCollisionUp: true
     }
@@ -74,12 +50,15 @@ export default {
       acceleration: 200,
     }
   },
-  items: {
+  images: {
     flashlight: 'assets/images/flashlight.png',
     fire: 'assets/images/fire.png',
     flaregun: 'assets/images/flaregun.png',
     gold: 'assets/images/gold.png',
-    radio: 'assets/images/radio.png'
+    radio: 'assets/images/radio.png',
+    island1: 'assets/images/tiles2.png',
+    cavetiles: 'assets/images/cavetiles.png',
+    diamond: 'assets/images/diamond.png'
   },
   state: {
     map: 'island1',

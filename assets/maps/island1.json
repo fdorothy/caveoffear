@@ -38,6 +38,14 @@
          "height":30,
          "name":"bounds",
          "opacity":1,
+         "properties":
+            {
+             "collides":"true"
+            },
+         "propertytypes":
+            {
+             "collides":"string"
+            },
          "type":"tilelayer",
          "visible":true,
          "width":200,
@@ -68,18 +76,18 @@
         }, 
         {
          "draworder":"topdown",
-         "height":30,
+         "height":0,
          "name":"entrances",
          "objects":[
                 {
-                 "height":53.3333333333333,
+                 "height":53.3333,
                  "id":1,
                  "name":"game_start",
                  "rotation":0,
                  "type":"entrance",
                  "visible":true,
-                 "width":38.6666666666667,
-                 "x":2642.66666666667,
+                 "width":38.6667,
+                 "x":2642.67,
                  "y":744
                 }, 
                 {
@@ -107,13 +115,13 @@
          "opacity":1,
          "type":"objectgroup",
          "visible":true,
-         "width":50,
+         "width":0,
          "x":0,
          "y":0
         }, 
         {
          "draworder":"topdown",
-         "height":30,
+         "height":0,
          "name":"exits",
          "objects":[
                 {
@@ -135,9 +143,9 @@
                  "rotation":0,
                  "type":"door",
                  "visible":true,
-                 "width":29.6666666666666,
+                 "width":29.6667,
                  "x":2977,
-                 "y":609.333333333333
+                 "y":609.333
                 }, 
                 {
                  "height":62,
@@ -159,31 +167,31 @@
                  "type":"door",
                  "visible":true,
                  "width":29.6667,
-                 "x":3329.66665,
+                 "x":3329.67,
                  "y":321.5
                 }],
          "opacity":1,
          "type":"objectgroup",
          "visible":true,
-         "width":50,
+         "width":0,
          "x":0,
          "y":0
         }, 
         {
          "draworder":"topdown",
-         "height":30,
+         "height":0,
          "name":"monsters",
          "objects":[],
          "opacity":1,
          "type":"objectgroup",
          "visible":true,
-         "width":200,
+         "width":0,
          "x":0,
          "y":0
         }, 
         {
          "draworder":"topdown",
-         "height":30,
+         "height":0,
          "name":"items",
          "objects":[
                 {
@@ -208,12 +216,20 @@
          "opacity":1,
          "type":"objectgroup",
          "visible":true,
-         "width":200,
+         "width":0,
          "x":0,
          "y":0
         }],
- "nextobjectid":12,
+ "nextobjectid":16,
  "orientation":"orthogonal",
+ "properties":
+    {
+     "spriteLayer":"bounds"
+    },
+ "propertytypes":
+    {
+     "spriteLayer":"string"
+    },
  "renderorder":"right-down",
  "tileheight":32,
  "tilesets":[

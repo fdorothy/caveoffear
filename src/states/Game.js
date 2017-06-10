@@ -16,10 +16,10 @@ export default class extends Phaser.State {
   create () {
     this.game.physics.startSystem(Phaser.Physics.ARCADE);
 
-    var map_config = config.levels[config.state.map]
+    var mapInfo = config.levels[config.state.map];
     this.map = new Level({
       game: this.game,
-      def: map_config
+      mapInfo: mapInfo
     });
 
     this.spriteLayerIndex = 0;
@@ -53,7 +53,7 @@ export default class extends Phaser.State {
       }
     }
 
-    if (map_config.checkCollisionUp == false) {
+    if (mapInfo.checkCollisionUp == false) {
       this.player.body.checkCollision.up = false;
       this.player.body.checkCollision.left = false;
       this.player.body.checkCollision.right = false;
@@ -129,9 +129,10 @@ export default class extends Phaser.State {
     game.physics.arcade.collide(this.player, this.map.boundaries);
     game.physics.arcade.collide(this.monsters, this.map.boundaries);
     game.physics.arcade.collide(this.items, this.map.boundaries);
-    game.physics.arcade.collide(this.map.objectGroup, this.map.boundaries);
+    game.physics.arcade.collide(this.map.items, this.map.boundaries);
     this.tooltip.text = '';
-    game.physics.arcade.overlap(this.player, this.map.objectGroup, this.trigger, null, this);
+    game.physics.arcade.overlap(this.player, this.map.items, this.trigger, null, this);
+    game.physics.arcade.overlap(this.player, this.map.triggers, this.trigger, null, this);
     game.physics.arcade.overlap(this.player, this.monsters, (x, y) => {this.state.start("GameOver");}, null, this);
     var blocked = this.player.body.blocked.down;
     if (this.cursor.left.isDown) {
@@ -149,7 +150,7 @@ export default class extends Phaser.State {
     if (this.cursor.up.isDown) {
       this.player.continueJump();
     }
-    if (!this.map.def.lights) {
+    if (!this.map.mapInfo.lights) {
       this.lightSprite.reset(game.camera.x, game.camera.y);
       this.updateShadowTexture();
     }

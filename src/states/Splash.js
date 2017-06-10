@@ -11,27 +11,16 @@ export default class extends Phaser.State {
     centerGameObjects([this.loaderBg, this.loaderBar])
 
     this.load.setPreloadSprite(this.loaderBar)
-    //
-    // load your assets
-    //
 
     // load all tilemaps and tilesheets
     for (var key in config.levels) {
-      var tilemap = config.levels[key].tilemap;
-      this.load.tilemap(tilemap.key, tilemap.path, null, Phaser.Tilemap.TILED_JSON);
-      var tilesheets = config.levels[key].tilesheets
-      for (var sheet_key in tilesheets) {
-	var tilesheet = tilesheets[sheet_key];
-	this.load.image(tilesheet.key, tilesheet.path);
-      }
+      this.load.tilemap(key, config.levels[key].tilemap, null, Phaser.Tilemap.TILED_JSON);
     }
 
-    for (var key in config.items) {
-      var asset = config.items[key];
-      this.load.image(key, asset);
+    for (var key in config.images) {
+      this.load.image(key, config.images[key]);
     }
 
-    this.load.image('diamond', 'assets/images/diamond.png');
     this.load.spritesheet('ms', 'assets/images/metalslug_mummy37x45.png', 37, 45, 18);
     var result = this.load.atlasJSONHash('hero', 'assets/images/hero.png', 'assets/images/hero.json');
 

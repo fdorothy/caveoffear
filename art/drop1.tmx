@@ -33,6 +33,9 @@
 </data>
  </layer>
  <layer name="bounds" width="18" height="25">
+  <properties>
+   <property name="collides" type="bool" value="true"/>
+  </properties>
   <data encoding="csv">
 3221225480,18,18,18,18,18,2684354563,0,0,0,0,3221225475,18,18,18,18,18,1610612744,
 11,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,9,

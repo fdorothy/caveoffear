@@ -3,50 +3,54 @@ import config from '../config'
 import Item from './Item'
 
 export default class extends Phaser.Tilemap {
-  constructor ({ game, def }) {
-    super(game, def.tilemap.key)
-    this.def = def
+  constructor ({ game, mapInfo }) {
+    super(game, mapInfo.name)
+    this.mapInfo = mapInfo
 
-    for (var key in def.tilesheets) {
-      this.addTilesetImage(key, def.tilesheets[key].key);
+    for (var i in this.tilesets) {
+      key = this.tilesets[i].name;
+      this.addTilesetImage(key);
     }
 
+    // load all tile layers
     this.layerMap = {};
-    for (var layer in def.layers) {
-      var key = def.layers[layer];
-      layer = this.createLayer(key);
-      this.layerMap[key] = layer;
-    }
     this.boundaries = [];
-    for (var layer in def.boundaries) {
-      var key = def.boundaries[layer];
-      this.boundaries = [this.layerMap[key]];
-      this.setCollisionBetween(1, 2000, true, key);
-      this.layerMap[key].resizeWorld();
+    for (var i in this.layers) {
+      var info = this.layers[i];
+      var name = info.name;
+      var layer = this.createLayer(info.name);
+      if (info.properties.collides) {
+	this.setCollisionBetween(1, 2000, true, name);
+	this.boundaries.push(layer);
+      }
+      layer.alpha = info.alpha;
+      layer.resizeWorld();
+      this.layerMap[info.name] = layer;
     }
 
-    if (this.layerMap['water']) {
-      this.layerMap['water'].alpha = 0.5;
-    }
-
+    // load all objects
+    this.items = this.game.add.group();
+    this.triggers = [];
     this.objectGroup = this.game.add.group();
     for (var key in this.objects) {
       for (var obj in this.objects[key]) {
 	var props = this.objects[key][obj];
+	var sprite;
 	if (props.type == "item") {
-	  var sprite = new Item({
+	  sprite = new Item({
 	    game: this.game,
 	    x: props.x + props.width / 2.0,
 	    y: props.y + props.height / 2.0,
 	    name: props.name
 	  });
 	  sprite.props = props
-	  this.objectGroup.add(sprite);
+	  this.items.add(sprite);
 	} else {
-	  var rect = this.objectGroup.create(props.x, props.y, null);
-	  this.game.physics.enable(rect, Phaser.Physics.ARCADE);
-	  rect.body.setSize(props.width, props.height, 0, 0);
-	  rect.props = props;
+	  sprite = this.objectGroup.create(props.x, props.y, null);
+	  this.game.physics.enable(sprite, Phaser.Physics.ARCADE);
+	  sprite.body.setSize(props.width, props.height, 0, 0);
+	  sprite.props = props;
+	  this.triggers.push(sprite);
 	}
       }
     }
