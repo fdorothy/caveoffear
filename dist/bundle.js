@@ -588,11 +588,11 @@ exports.default = {
     starfield: 'assets/images/starfield.png'
   },
   state: {
-    map: 'island1',
-    entrance: 'game_start',
-    equipped: null,
+    map: 'passage1',
+    entrance: 'gold',
+    equipped: 'flashlight',
     items: null,
-    fires: null
+    fires: { passage1: true }
   }
 };
 
@@ -4667,6 +4667,7 @@ var _class = function (_Phaser$State) {
     value: function create() {
       this.game.physics.startSystem(_phaser2.default.Physics.ARCADE);
       this.game.time.advancedTiming = true;
+      this.itemPickupCooldown = 1.0;
 
       this.map = new _Level2.default({
         game: this.game,
@@ -4787,9 +4788,13 @@ var _class = function (_Phaser$State) {
   }, {
     key: 'pickupItem',
     value: function pickupItem(sprite) {
-      _config2.default.state.equipped = sprite.props.name;
-      sprite.destroy();
-      _config2.default.state.items[sprite.props.name] = "equipped";
+      if (this.itemPickupCooldown <= 0.0) {
+        this.dropItem();
+        _config2.default.state.equipped = sprite.props.name;
+        sprite.destroy();
+        _config2.default.state.items[sprite.props.name] = "equipped";
+        this.itemPickupCooldown = 1.0;
+      }
     }
   }, {
     key: 'dropItem',
@@ -4880,6 +4885,8 @@ var _class = function (_Phaser$State) {
     value: function update() {
       var _this2 = this;
 
+      var dt = this.game.time.physicsElapsed;
+      if (this.itemPickupCooldown > 0.0) this.itemPickupCooldown -= dt;
       this.pushPlatformPhysics(this.player);
       game.physics.arcade.collide([this.player, this.monsters, this.items], this.map.boundaries);
       this.popPlatformPhysics(this.player);
@@ -11043,7 +11050,6 @@ var _class = function (_Phaser$Sprite) {
 	}, {
 		key: 'ignite',
 		value: function ignite() {
-			console.log("igniting");
 			this.lit = true;
 			this.animations.play('fire');
 			delete this.props.properties.tooltip;

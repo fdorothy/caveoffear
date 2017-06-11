@@ -18,6 +18,7 @@ export default class extends Phaser.State {
   create () {
     this.game.physics.startSystem(Phaser.Physics.ARCADE);
     this.game.time.advancedTiming = true;
+		this.itemPickupCooldown = 1.0;
 
     this.map = new Level({
       game: this.game,
@@ -144,9 +145,13 @@ export default class extends Phaser.State {
   }
 
   pickupItem(sprite) {
-    config.state.equipped = sprite.props.name;
-    sprite.destroy();
-    config.state.items[sprite.props.name] = "equipped";
+		if (this.itemPickupCooldown <= 0.0) {
+			this.dropItem();
+			config.state.equipped = sprite.props.name;
+			sprite.destroy();
+			config.state.items[sprite.props.name] = "equipped";
+			this.itemPickupCooldown = 1.0;
+		}
   }
 
   dropItem() {
@@ -227,6 +232,9 @@ export default class extends Phaser.State {
   }
 
   update() {
+		var dt = this.game.time.physicsElapsed;
+		if (this.itemPickupCooldown > 0.0)
+			this.itemPickupCooldown -= dt;
     this.pushPlatformPhysics(this.player);
     game.physics.arcade.collide([this.player, this.monsters, this.items], this.map.boundaries);
     this.popPlatformPhysics(this.player);

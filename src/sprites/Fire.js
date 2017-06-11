@@ -35,7 +35,6 @@ export default class extends Phaser.Sprite {
 	}
 
 	ignite() {
-		console.log("igniting");
 		this.lit = true
 		this.animations.play('fire');
 		delete this.props.properties.tooltip;
