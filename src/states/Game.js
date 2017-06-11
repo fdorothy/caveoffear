@@ -157,7 +157,8 @@ export default class extends Phaser.State {
   dropItem() {
     if (config.state.equipped != null) {
       var sprite = this.spawnItem(config.state.equipped, this.player.x, this.player.y);
-      sprite.body.velocity.x = 100;
+			sprite.body.velocity.x = this.player.body.velocity.x * 3;
+			sprite.body.velocity.y = this.player.body.velocity.y * 2;
       this.game.add.tween(sprite.body.velocity).to({x: 0}, 1200, Phaser.Easing.Linear.None, true);
       config.state.equipped = null;
     }

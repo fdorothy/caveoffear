@@ -4801,7 +4801,8 @@ var _class = function (_Phaser$State) {
     value: function dropItem() {
       if (_config2.default.state.equipped != null) {
         var sprite = this.spawnItem(_config2.default.state.equipped, this.player.x, this.player.y);
-        sprite.body.velocity.x = 100;
+        sprite.body.velocity.x = this.player.body.velocity.x * 3;
+        sprite.body.velocity.y = this.player.body.velocity.y * 2;
         this.game.add.tween(sprite.body.velocity).to({ x: 0 }, 1200, _phaser2.default.Easing.Linear.None, true);
         _config2.default.state.equipped = null;
       }

@@ -43,10 +43,10 @@ export default {
     starfield: 'assets/images/starfield.png',
   },
   state: {
-    map: 'island1',
-    entrance: 'game_start',
-    equipped: null,
+    map: 'passage1',
+    entrance: 'gold',
+    equipped: 'flashlight',
     items: null,
-		fires: null
+		fires: {passage1: true}
   }
 }
