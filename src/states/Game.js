@@ -238,8 +238,8 @@ export default class extends Phaser.State {
     }
     this.shadowTexture.context.fillRect(0, 0, this.game.width+100, this.game.height+100);
 
-    var x = this.player.x - this.game.camera.x;
-    var y = this.player.y - this.game.camera.y;
+    var x = this.player.x - this.game.camera.x + 50;
+    var y = this.player.y - this.game.camera.y + 50;
 
     if (config.state.equipped == 'flashlight') {
       this.drawLight(x, y, 150 + game.rnd.integerInRange(1,20), 1.0);
