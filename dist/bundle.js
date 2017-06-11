@@ -4731,8 +4731,8 @@ var _class = function (_Phaser$State) {
       this.dropkey = this.game.input.keyboard.addKey(_phaser2.default.Keyboard.D);
       this.game.input.keyboard.addKeyCapture([_phaser2.default.Keyboard.LEFT, _phaser2.default.Keyboard.RIGHT, _phaser2.default.Keyboard.UP, _phaser2.default.Keyboard.DOWN, _phaser2.default.Keyboard.SPACEBAR]);
 
-      this.shadowTexture = this.game.add.bitmapData(this.game.width, this.game.height);
-      this.lightSprite = this.game.add.image(this.game.camera.x, this.game.camera.y, this.shadowTexture);
+      this.shadowTexture = this.game.add.bitmapData(this.game.width + 100, this.game.height + 100);
+      this.lightSprite = this.game.add.image(this.game.camera.x - 50, this.game.camera.y - 50, this.shadowTexture);
       this.lightSprite.blendMode = _phaser2.default.blendModes.MULTIPLY;
       var style = {
         font: 'bold 16px Belgrano',
@@ -4877,7 +4877,7 @@ var _class = function (_Phaser$State) {
       if (this.dropkey.isDown) {
         this.dropItem();
       }
-      this.lightSprite.reset(game.camera.x, game.camera.y);
+      this.lightSprite.reset(game.camera.x - 50, game.camera.y - 50);
       this.updateShadowTexture();
     }
   }, {
@@ -4888,7 +4888,7 @@ var _class = function (_Phaser$State) {
       } else {
         this.shadowTexture.context.fillStyle = 'rgb(100, 100, 100)';
       }
-      this.shadowTexture.context.fillRect(0, 0, this.game.width, this.game.height);
+      this.shadowTexture.context.fillRect(0, 0, this.game.width + 100, this.game.height + 100);
 
       var x = this.player.x - this.game.camera.x;
       var y = this.player.y - this.game.camera.y;
