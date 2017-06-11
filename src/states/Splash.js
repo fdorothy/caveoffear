@@ -22,6 +22,7 @@ export default class extends Phaser.State {
     }
 
     this.load.spritesheet('ms', 'assets/images/metalslug_mummy37x45.png', 37, 45, 18);
+    this.load.spritesheet('fire', 'assets/images/fire.png', 64, 64, 4);
     var result = this.load.atlasJSONHash('hero', 'assets/images/hero.png', 'assets/images/hero.json');
 
     config.state = JSON.parse(config.initial_state);

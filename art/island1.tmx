@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.0" orientation="orthogonal" renderorder="right-down" width="200" height="30" tilewidth="32" tileheight="32" nextobjectid="16">
+<map version="1.0" orientation="orthogonal" renderorder="right-down" width="200" height="30" tilewidth="32" tileheight="32" nextobjectid="20">
  <properties>
   <property name="dark" type="bool" value="false"/>
   <property name="name" value="island"/>
@@ -206,5 +206,7 @@
  <objectgroup name="monsters"/>
  <objectgroup name="items">
   <object id="11" name="flashlight" type="item_spawn" x="3054" y="509" width="29" height="30"/>
+  <object id="16" name="fire" type="fire_spawn" x="3008.25" y="768" width="32.25" height="32.25"/>
+  <object id="17" x="3029.75" y="779.75" width="0.25"/>
  </objectgroup>
 </map>

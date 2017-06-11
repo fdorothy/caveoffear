@@ -4,6 +4,7 @@ import Player from '../sprites/Player'
 import Monster from '../sprites/Monster'
 import Level from '../sprites/Level'
 import Item from '../sprites/Item'
+import Fire from '../sprites/Fire'
 
 import config from '../config'
 
@@ -11,10 +12,12 @@ export default class extends Phaser.State {
   init () {
     this.stage.backgroundColor = '#000'
   }
-  preload () {}
+  preload () {
+  }
 
   create () {
     this.game.physics.startSystem(Phaser.Physics.ARCADE);
+    this.game.time.advancedTiming = true;
 
     this.map = new Level({
       game: this.game,
@@ -31,8 +34,6 @@ export default class extends Phaser.State {
       var result = this.game.add.tileSprite(0, 0, this.game.world.width, this.game.world.height, 'starfield');
       result.z = -1;
       result.tilePosition.y += 2;
-      console.log("adding starfield");
-      console.log(result);
       this.game.world.sort();
     }
 
@@ -47,25 +48,12 @@ export default class extends Phaser.State {
     this.game.world.addAt(this.player, this.spriteLayerIndex+1);
     this.game.camera.follow(this.player);
 
-    // spawn monsters
-    this.monsters = this.game.add.group();
-    for (var key in this.map.allObjects) {
-      var monster = this.map.allObjects[key];
-      if (monster.type == "monster") {
-	var sprite = new Monster({
-	  game: this.game,
-	  x: monster.x + monster.width / 2.0,
-	  y: monster.y + monster.height / 2.0,
-	  info: monster.properties
-	});
-	this.monsters.add(sprite);
-      }
-    }
-
     // spawn items
     this.items = this.game.add.group();
     if (config.state.items == null)
       config.state.items = {};
+    if (config.state.fires == null)
+      config.state.fires = {};
     for (var key in config.state.items) {
       var obj = config.state.items[key];
       if (obj != "equipped" && obj.map == this.map.asset) {
@@ -75,11 +63,38 @@ export default class extends Phaser.State {
     for (var key in this.map.allObjects) {
       var obj = this.map.allObjects[key];
       if (obj.type == "item_spawn") {
-	if (config.state.items[obj.name] == null) {
-	  this.spawnItem(obj.name, obj.x + obj.width/2.0, obj.y+obj.height/2.0);
-	}
-      }
+				if (config.state.items[obj.name] == null) {
+					this.spawnItem(obj.name, obj.x + obj.width/2.0, obj.y+obj.height/2.0);
+				}
+      } else if (obj.type == "fire_spawn") {
+				this.fire = new Fire({
+					game: this.game,
+					x: obj.x + obj.width / 2.0,
+					y: obj.y + obj.height*1.1,
+				});
+				if (config.state.fires[config.state.map])
+					this.ignite();
+				this.items.add(this.fire);
+			}
     }
+		this.dark = !config.state.fires[config.state.map];
+
+    // spawn monsters
+		if (this.dark) {
+			this.monsters = this.game.add.group();
+			for (var key in this.map.allObjects) {
+				var monster = this.map.allObjects[key];
+				if (monster.type == "monster") {
+					var sprite = new Monster({
+						game: this.game,
+						x: monster.x + monster.width / 2.0,
+						y: monster.y + monster.height / 2.0,
+						info: monster.properties
+					});
+					this.monsters.add(sprite);
+				}
+			}
+		}
 
     this.cursor = this.game.input.keyboard.createCursorKeys();
     this.spacebar = this.game.input.keyboard.addKey(Phaser.Keyboard.SPACEBAR);
@@ -143,8 +158,16 @@ export default class extends Phaser.State {
     }
   }
 
+	ignite() {
+		this.fire.ignite();
+		config.state.fires[config.state.map] = true;
+		this.dark = false;
+	}
+
   render () {
     //game.debug.spriteInfo(this.player, 32, 32);
+		//game.debug.text(game.time.fps || '--', 2, 14, "#fff");
+		this.game.debug.text(game.time.fps || '--', 2, 14);   
   }
 
   trigger(x, y) {
@@ -158,6 +181,10 @@ export default class extends Phaser.State {
       if (this.spacebar.isDown) {
 	this.warp(y.props.properties);
       }
+    } else if (y.props.type == "fire") {
+      if (this.spacebar.isDown) {
+				this.ignite();
+      }
     }
 
     // show tooltip if available
@@ -165,8 +192,8 @@ export default class extends Phaser.State {
       var tooltip = y.props.properties.tooltip;
       if (tooltip != null) {
 	this.tooltip.text = tooltip;
-	this.tooltip.x = y.x + y.width / 2.0;
-	this.tooltip.y = y.y - 64;
+	this.tooltip.x = (y.left + y.right) / 2.0;
+	this.tooltip.y = y.bottom - 64;
       }
     }
   }
@@ -231,10 +258,14 @@ export default class extends Phaser.State {
   }
 
   updateShadowTexture() {
-    if (this.map.properties.dark) {
-      this.shadowTexture.context.fillStyle = 'rgb(10, 10, 10)';
+    if (this.dark) {
+			if (!this.map.properties.dark) {
+				this.shadowTexture.context.fillStyle = 'rgb(100, 100, 100)';
+			} else {
+				this.shadowTexture.context.fillStyle = 'rgb(10, 10, 10)';
+			}
     } else {
-      this.shadowTexture.context.fillStyle = 'rgb(100, 100, 100)';
+      this.shadowTexture.context.fillStyle = 'rgb(128, 128, 128)';
     }
     this.shadowTexture.context.fillRect(0, 0, this.game.width+100, this.game.height+100);
 

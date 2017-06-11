@@ -20,6 +20,7 @@ export default {
     island1: 'assets/maps/island1.json',
     hallway: 'assets/maps/hallway.json',
     drop1: 'assets/maps/drop1.json',
+    passage1: 'assets/maps/passage1.json',
   },
   monsters: {
     'mummy': {
@@ -33,7 +34,6 @@ export default {
   },
   images: {
     flashlight: 'assets/images/flashlight.png',
-    fire: 'assets/images/fire.png',
     flaregun: 'assets/images/flaregun.png',
     gold: 'assets/images/gold.png',
     radio: 'assets/images/radio.png',
@@ -46,6 +46,7 @@ export default {
     map: 'island1',
     entrance: 'game_start',
     equipped: null,
-    items: null
+    items: null,
+		fires: null
   }
 }

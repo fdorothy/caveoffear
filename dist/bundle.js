@@ -564,7 +564,8 @@ exports.default = {
   levels: {
     island1: 'assets/maps/island1.json',
     hallway: 'assets/maps/hallway.json',
-    drop1: 'assets/maps/drop1.json'
+    drop1: 'assets/maps/drop1.json',
+    passage1: 'assets/maps/passage1.json'
   },
   monsters: {
     'mummy': {
@@ -578,7 +579,6 @@ exports.default = {
   },
   images: {
     flashlight: 'assets/images/flashlight.png',
-    fire: 'assets/images/fire.png',
     flaregun: 'assets/images/flaregun.png',
     gold: 'assets/images/gold.png',
     radio: 'assets/images/radio.png',
@@ -591,7 +591,8 @@ exports.default = {
     map: 'island1',
     entrance: 'game_start',
     equipped: null,
-    items: null
+    items: null,
+    fires: null
   }
 };
 
@@ -4627,6 +4628,10 @@ var _Item = __webpack_require__(/*! ../sprites/Item */ 91);
 
 var _Item2 = _interopRequireDefault(_Item);
 
+var _Fire = __webpack_require__(/*! ../sprites/Fire */ 319);
+
+var _Fire2 = _interopRequireDefault(_Fire);
+
 var _config = __webpack_require__(/*! ../config */ 25);
 
 var _config2 = _interopRequireDefault(_config);
@@ -4661,6 +4666,7 @@ var _class = function (_Phaser$State) {
     key: 'create',
     value: function create() {
       this.game.physics.startSystem(_phaser2.default.Physics.ARCADE);
+      this.game.time.advancedTiming = true;
 
       this.map = new _Level2.default({
         game: this.game,
@@ -4677,8 +4683,6 @@ var _class = function (_Phaser$State) {
         var result = this.game.add.tileSprite(0, 0, this.game.world.width, this.game.world.height, 'starfield');
         result.z = -1;
         result.tilePosition.y += 2;
-        console.log("adding starfield");
-        console.log(result);
         this.game.world.sort();
       }
 
@@ -4693,24 +4697,10 @@ var _class = function (_Phaser$State) {
       this.game.world.addAt(this.player, this.spriteLayerIndex + 1);
       this.game.camera.follow(this.player);
 
-      // spawn monsters
-      this.monsters = this.game.add.group();
-      for (var key in this.map.allObjects) {
-        var monster = this.map.allObjects[key];
-        if (monster.type == "monster") {
-          var sprite = new _Monster2.default({
-            game: this.game,
-            x: monster.x + monster.width / 2.0,
-            y: monster.y + monster.height / 2.0,
-            info: monster.properties
-          });
-          this.monsters.add(sprite);
-        }
-      }
-
       // spawn items
       this.items = this.game.add.group();
       if (_config2.default.state.items == null) _config2.default.state.items = {};
+      if (_config2.default.state.fires == null) _config2.default.state.fires = {};
       for (var key in _config2.default.state.items) {
         var obj = _config2.default.state.items[key];
         if (obj != "equipped" && obj.map == this.map.asset) {
@@ -4722,6 +4712,32 @@ var _class = function (_Phaser$State) {
         if (obj.type == "item_spawn") {
           if (_config2.default.state.items[obj.name] == null) {
             this.spawnItem(obj.name, obj.x + obj.width / 2.0, obj.y + obj.height / 2.0);
+          }
+        } else if (obj.type == "fire_spawn") {
+          this.fire = new _Fire2.default({
+            game: this.game,
+            x: obj.x + obj.width / 2.0,
+            y: obj.y + obj.height * 1.1
+          });
+          if (_config2.default.state.fires[_config2.default.state.map]) this.ignite();
+          this.items.add(this.fire);
+        }
+      }
+      this.dark = !_config2.default.state.fires[_config2.default.state.map];
+
+      // spawn monsters
+      if (this.dark) {
+        this.monsters = this.game.add.group();
+        for (var key in this.map.allObjects) {
+          var monster = this.map.allObjects[key];
+          if (monster.type == "monster") {
+            var sprite = new _Monster2.default({
+              game: this.game,
+              x: monster.x + monster.width / 2.0,
+              y: monster.y + monster.height / 2.0,
+              info: monster.properties
+            });
+            this.monsters.add(sprite);
           }
         }
       }
@@ -4786,9 +4802,18 @@ var _class = function (_Phaser$State) {
       }
     }
   }, {
+    key: 'ignite',
+    value: function ignite() {
+      this.fire.ignite();
+      _config2.default.state.fires[_config2.default.state.map] = true;
+      this.dark = false;
+    }
+  }, {
     key: 'render',
     value: function render() {
       //game.debug.spriteInfo(this.player, 32, 32);
+      //game.debug.text(game.time.fps || '--', 2, 14, "#fff");
+      this.game.debug.text(game.time.fps || '--', 2, 14);
     }
   }, {
     key: 'trigger',
@@ -4803,6 +4828,10 @@ var _class = function (_Phaser$State) {
         if (this.spacebar.isDown) {
           this.warp(y.props.properties);
         }
+      } else if (y.props.type == "fire") {
+        if (this.spacebar.isDown) {
+          this.ignite();
+        }
       }
 
       // show tooltip if available
@@ -4810,8 +4839,8 @@ var _class = function (_Phaser$State) {
         var tooltip = y.props.properties.tooltip;
         if (tooltip != null) {
           this.tooltip.text = tooltip;
-          this.tooltip.x = y.x + y.width / 2.0;
-          this.tooltip.y = y.y - 64;
+          this.tooltip.x = (y.left + y.right) / 2.0;
+          this.tooltip.y = y.bottom - 64;
         }
       }
     }
@@ -4883,10 +4912,14 @@ var _class = function (_Phaser$State) {
   }, {
     key: 'updateShadowTexture',
     value: function updateShadowTexture() {
-      if (this.map.properties.dark) {
-        this.shadowTexture.context.fillStyle = 'rgb(10, 10, 10)';
+      if (this.dark) {
+        if (!this.map.properties.dark) {
+          this.shadowTexture.context.fillStyle = 'rgb(100, 100, 100)';
+        } else {
+          this.shadowTexture.context.fillStyle = 'rgb(10, 10, 10)';
+        }
       } else {
-        this.shadowTexture.context.fillStyle = 'rgb(100, 100, 100)';
+        this.shadowTexture.context.fillStyle = 'rgb(128, 128, 128)';
       }
       this.shadowTexture.context.fillRect(0, 0, this.game.width + 100, this.game.height + 100);
 
@@ -5062,6 +5095,7 @@ var _class = function (_Phaser$State) {
       }
 
       this.load.spritesheet('ms', 'assets/images/metalslug_mummy37x45.png', 37, 45, 18);
+      this.load.spritesheet('fire', 'assets/images/fire.png', 64, 64, 4);
       var result = this.load.atlasJSONHash('hero', 'assets/images/hero.png', 'assets/images/hero.json');
 
       _config2.default.state = JSON.parse(_config2.default.initial_state);
@@ -10926,6 +10960,100 @@ module.exports = __webpack_require__(/*! ./modules/_core */ 26);
 __webpack_require__(/*! babel-polyfill */122);
 module.exports = __webpack_require__(/*! /data/fdorothy/personal/games/caveoffear/src/main.js */121);
 
+
+/***/ }),
+/* 318 */,
+/* 319 */
+/* no static exports found */
+/* all exports used */
+/*!*****************************!*\
+  !*** ./src/sprites/Fire.js ***!
+  \*****************************/
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+	value: true
+});
+
+var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+var _phaser = __webpack_require__(/*! phaser */ 18);
+
+var _phaser2 = _interopRequireDefault(_phaser);
+
+var _config = __webpack_require__(/*! ../config */ 25);
+
+var _config2 = _interopRequireDefault(_config);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+
+function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+
+var _class = function (_Phaser$Sprite) {
+	_inherits(_class, _Phaser$Sprite);
+
+	function _class(_ref) {
+		var game = _ref.game,
+		    x = _ref.x,
+		    y = _ref.y;
+
+		_classCallCheck(this, _class);
+
+		var _this = _possibleConstructorReturn(this, (_class.__proto__ || Object.getPrototypeOf(_class)).call(this, game, x, y, 'fire'));
+
+		game.physics.arcade.enable(_this);
+		_this.name = 'fire';
+		_this.timer = 0.0;
+		_this.animations.add('fire', [1, 2, 3, 4, 5], 5, true);
+		_this.lit = false;
+		_this.frame = 0;
+
+		_this.emitter = game.add.emitter(x, y, 100);
+		_this.emitter.makeParticles('diamond');
+		_this.emitter.gravity = 0;
+		_this.emitter.start(true, 500, null, 10);
+		_this.timer = 0.0;
+
+		_this.props = { type: "fire", name: "fire", properties: { tooltip: "ignite" } };
+		_this.anchor.setTo(0.5, 1.0);
+		return _this;
+	}
+
+	_createClass(_class, [{
+		key: 'update',
+		value: function update() {
+			if (!this.lit) {
+				var dt = this.game.time.physicsElapsed;
+				this.timer += dt;
+				if (this.timer >= 1.0) {
+					this.emitter.x = this.x;
+					this.emitter.y = this.y;
+					this.emitter.start(true, 500, null, 10);
+					this.timer = 0.0;
+				}
+			}
+		}
+	}, {
+		key: 'ignite',
+		value: function ignite() {
+			console.log("igniting");
+			this.lit = true;
+			this.animations.play('fire');
+			delete this.props.properties.tooltip;
+		}
+	}]);
+
+	return _class;
+}(_phaser2.default.Sprite);
+
+exports.default = _class;
 
 /***/ })
 ],[317]);

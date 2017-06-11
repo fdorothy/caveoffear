@@ -138,6 +138,16 @@
                  "height":60,
                  "id":11,
                  "name":"exit_right",
+                 "properties":
+                    {
+                     "entrance":"entrance_left",
+                     "map":"passage1"
+                    },
+                 "propertytypes":
+                    {
+                     "entrance":"string",
+                     "map":"string"
+                    },
                  "rotation":0,
                  "type":"exit",
                  "visible":true,
@@ -151,8 +161,31 @@
          "width":0,
          "x":0,
          "y":0
+        }, 
+        {
+         "draworder":"topdown",
+         "height":25,
+         "name":"items",
+         "objects":[
+                {
+                 "height":31.5,
+                 "id":12,
+                 "name":"fire",
+                 "rotation":0,
+                 "type":"fire_spawn",
+                 "visible":true,
+                 "width":31.75,
+                 "x":208.125,
+                 "y":319.25
+                }],
+         "opacity":1,
+         "type":"objectgroup",
+         "visible":true,
+         "width":18,
+         "x":0,
+         "y":0
         }],
- "nextobjectid":12,
+ "nextobjectid":13,
  "orientation":"orthogonal",
  "properties":
     {
