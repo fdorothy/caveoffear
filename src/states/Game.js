@@ -234,7 +234,7 @@ export default class extends Phaser.State {
     if (this.map.properties.dark) {
       this.shadowTexture.context.fillStyle = 'rgb(10, 10, 10)';
     } else {
-      this.shadowTexture.context.fillStyle = 'rgb(50, 50, 50)';
+      this.shadowTexture.context.fillStyle = 'rgb(100, 100, 100)';
     }
     this.shadowTexture.context.fillRect(0, 0, this.game.width, this.game.height);
 

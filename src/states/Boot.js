@@ -4,7 +4,10 @@ import config from '../config'
 
 export default class extends Phaser.State {
   init () {
-    this.stage.backgroundColor = '#EDEEC9'
+    this.game.scale.pageAlignHorizontally = true;
+    this.game.scale.pageAlignVertically = true;
+    this.game.scale.refresh();
+    this.stage.backgroundColor = '#000'
     this.fontsReady = false
     this.fontsLoaded = this.fontsLoaded.bind(this)
   }
@@ -25,10 +28,15 @@ export default class extends Phaser.State {
 
     var state = JSON.stringify(config.state);
     config.initial_state = state;
+    this.time = 1.0;
   }
 
   render () {
-    this.state.start('Splash')
+    var dt = this.game.time.physicsElapsed;
+    this.time -= dt;
+    if (this.time < 0.0) {
+      this.state.start('Splash')
+    }
   }
 
   fontsLoaded () {
