@@ -21,11 +21,13 @@ export default class extends Phaser.Sprite {
     this.jumping = false;
     this.game.scaleModel = Phaser.ScaleManager.SHOW_ALL;
     this.scale.setTo(config.player.scale);
+    this.targetAngle = 0.0;
   }
 
   update () {
-    if (this.body.blocked.down) {
-      if (this.body.velocity.x != 0.0) {
+    if (this.body.blocked.down || this.underwater) {
+      var vx = this.body.velocity.x;
+      if (vx < -1.0 || vx > 1.0) {
     	this.walkAnimation();
       } else {
     	this.stopAnimation();
@@ -38,7 +40,25 @@ export default class extends Phaser.Sprite {
       }
     }
 
-    if (this.body.blocked.down && this.jumping) {
+    var targetAngle = this.angle;
+    var dt = this.game.time.physicsElapsed;
+    var drag = 0.05;
+    if (this.underwater) {
+      this.body.gravity.y = -config.world.gravity / 2.0;
+      var drag = 7.0;
+    } else {
+      this.body.gravity.y = config.world.gravity;
+    }
+    this.body.velocity.y = this.body.velocity.y - this.body.velocity.y * dt * drag;
+    this.body.velocity.x = this.body.velocity.x - this.body.velocity.x * dt * drag;
+    var diff = targetAngle - this.angle;
+    if (diff > -10.0 && diff < 10.0) {
+      this.angle = targetAngle;
+    } else {
+      this.angle += diff * dt * 3;
+    }
+
+    if ((this.body.blocked.down || this.underwater) && this.jumping) {
       this.jumping = false;
       this.jumps = 0.0;
     }
@@ -75,7 +95,7 @@ export default class extends Phaser.Sprite {
   }
 
   startJump() {
-    if (this.body.blocked.down && this.jumping == false) {
+    if ((this.body.blocked.down || this.underwater) && this.jumping == false) {
       this.jumps = config.player.jumpBurst;
       this.body.velocity.y = -config.player.jumpBurst;
       this.jumping = true;

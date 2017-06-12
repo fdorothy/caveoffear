@@ -241,6 +241,14 @@ export default class extends Phaser.State {
     game.physics.arcade.collide([this.player, this.monsters, this.items], this.map.boundaries);
     this.popPlatformPhysics(this.player);
     this.tooltip.text = '';
+
+    this.player.underwater = false;
+    for (var idx in this.map.water) {
+      var layer = this.map.water[idx];
+      var tiles = layer.getTiles(this.player.x - 16, this.player.y - 16 - this.player.height / 2.0, 32, 32);
+      this.player.underwater = tiles.filter((x) => x.index != -1).length > 0;
+    }
+
     game.physics.arcade.overlap(this.player, this.items, this.trigger, null, this);
     game.physics.arcade.overlap(this.player, this.map.triggers, this.trigger, null, this);
     game.physics.arcade.overlap(this.player, this.monsters, (x, y) => {this.state.start("GameOver");}, null, this);

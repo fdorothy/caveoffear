@@ -15,13 +15,17 @@ export default class extends Phaser.Tilemap {
     // load all tile layers
     this.layerMap = {};
     this.boundaries = [];
+    this.water = [];
     for (var i in this.layers) {
       var info = this.layers[i];
       var name = info.name;
       var layer = this.createLayer(info.name);
       if (info.properties.collides) {
-				this.setCollisionBetween(1, 2000, true, name);
-				this.boundaries.push(layer);
+	this.setCollisionBetween(1, 2000, true, name);
+	this.boundaries.push(layer);
+      } else if (info.properties.water) {
+	this.setCollisionBetween(1, 2000, true, name);
+	this.water.push(layer);
       }
       layer.alpha = info.alpha;
       layer.resizeWorld();
@@ -35,14 +39,14 @@ export default class extends Phaser.Tilemap {
     this.allObjects = [];
     for (var key in this.objects) {
       for (var obj in this.objects[key]) {
-				var props = this.objects[key][obj];
-				this.objectMap[props.name] = props;
-				this.allObjects.push(props);
-				var sprite = this.objectGroup.create(props.x, props.y, null);
-				this.game.physics.enable(sprite, Phaser.Physics.ARCADE);
-				sprite.body.setSize(props.width, props.height, 0, 0);
-				sprite.props = props;
-				this.triggers.push(sprite);
+	var props = this.objects[key][obj];
+	this.objectMap[props.name] = props;
+	this.allObjects.push(props);
+	var sprite = this.objectGroup.create(props.x, props.y, null);
+	this.game.physics.enable(sprite, Phaser.Physics.ARCADE);
+	sprite.body.setSize(props.width, props.height, 0, 0);
+	sprite.props = props;
+	this.triggers.push(sprite);
       }
     }
   }

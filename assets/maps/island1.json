@@ -57,6 +57,14 @@
          "height":30,
          "name":"water",
          "opacity":0.5,
+         "properties":
+            {
+             "water":true
+            },
+         "propertytypes":
+            {
+             "water":"bool"
+            },
          "type":"tilelayer",
          "visible":true,
          "width":200,
