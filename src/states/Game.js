@@ -18,7 +18,7 @@ export default class extends Phaser.State {
   create () {
     this.game.physics.startSystem(Phaser.Physics.ARCADE);
     this.game.time.advancedTiming = true;
-		this.itemPickupCooldown = 1.0;
+    this.itemPickupCooldown = 1.0;
 
     this.map = new Level({
       game: this.game,
@@ -64,48 +64,48 @@ export default class extends Phaser.State {
     for (var key in this.map.allObjects) {
       var obj = this.map.allObjects[key];
       if (obj.type == "item_spawn") {
-				if (config.state.items[obj.name] == null) {
-					this.spawnItem(obj.name, obj.x + obj.width/2.0, obj.y+obj.height/2.0);
-				}
+	if (config.state.items[obj.name] == null) {
+	  this.spawnItem(obj.name, obj.x + obj.width/2.0, obj.y+obj.height/2.0);
+	}
       } else if (obj.type == "fire_spawn") {
-				this.fire = new Fire({
-					game: this.game,
-					x: obj.x + obj.width / 2.0,
-					y: obj.y + obj.height*1.1,
-				});
-				if (config.state.fires[config.state.map])
-					this.ignite();
-				this.items.add(this.fire);
-			}
+	this.fire = new Fire({
+	  game: this.game,
+	  x: obj.x + obj.width / 2.0,
+	  y: obj.y + obj.height*1.1,
+	});
+	if (config.state.fires[config.state.map])
+	  this.ignite();
+	this.items.add(this.fire);
+      }
     }
-		this.dark = !config.state.fires[config.state.map];
+    this.dark = !config.state.fires[config.state.map];
 
     // spawn monsters
-		if (this.dark) {
-			this.monsters = this.game.add.group();
-			for (var key in this.map.allObjects) {
-				var monster = this.map.allObjects[key];
-				if (monster.type == "monster") {
-					var sprite = new Monster({
-						game: this.game,
-						x: monster.x + monster.width / 2.0,
-						y: monster.y + monster.height / 2.0,
-						info: monster.properties
-					});
-					this.monsters.add(sprite);
-				}
-			}
-		}
+    if (this.dark) {
+      this.monsters = this.game.add.group();
+      for (var key in this.map.allObjects) {
+	var monster = this.map.allObjects[key];
+	if (monster.type == "monster") {
+	  var sprite = new Monster({
+	    game: this.game,
+	    x: monster.x + monster.width / 2.0,
+	    y: monster.y + monster.height / 2.0,
+	    info: monster.properties
+	  });
+	  this.monsters.add(sprite);
+	}
+      }
+    }
 
     this.cursor = this.game.input.keyboard.createCursorKeys();
     this.spacebar = this.game.input.keyboard.addKey(Phaser.Keyboard.SPACEBAR);
     this.dropkey = this.game.input.keyboard.addKey(Phaser.Keyboard.D);
     this.game.input.keyboard.addKeyCapture([
-    	Phaser.Keyboard.LEFT,
-    	Phaser.Keyboard.RIGHT,
-    	Phaser.Keyboard.UP,
-    	Phaser.Keyboard.DOWN,
-    	Phaser.Keyboard.SPACEBAR
+      Phaser.Keyboard.LEFT,
+      Phaser.Keyboard.RIGHT,
+      Phaser.Keyboard.UP,
+      Phaser.Keyboard.DOWN,
+      Phaser.Keyboard.SPACEBAR
     ]);
 
     this.shadowTexture = this.game.add.bitmapData(this.game.width+100, this.game.height+100);
@@ -145,35 +145,35 @@ export default class extends Phaser.State {
   }
 
   pickupItem(sprite) {
-		if (this.itemPickupCooldown <= 0.0) {
-			this.dropItem();
-			config.state.equipped = sprite.props.name;
-			sprite.destroy();
-			config.state.items[sprite.props.name] = "equipped";
-			this.itemPickupCooldown = 1.0;
-		}
+    if (this.itemPickupCooldown <= 0.0) {
+      this.dropItem();
+      config.state.equipped = sprite.props.name;
+      sprite.destroy();
+      config.state.items[sprite.props.name] = "equipped";
+      this.itemPickupCooldown = 1.0;
+    }
   }
 
   dropItem() {
     if (config.state.equipped != null) {
       var sprite = this.spawnItem(config.state.equipped, this.player.x, this.player.y);
-			sprite.body.velocity.x = this.player.body.velocity.x * 3;
-			sprite.body.velocity.y = this.player.body.velocity.y * 2;
+      sprite.body.velocity.x = this.player.body.velocity.x * 3;
+      sprite.body.velocity.y = this.player.body.velocity.y * 2;
       this.game.add.tween(sprite.body.velocity).to({x: 0}, 1200, Phaser.Easing.Linear.None, true);
       config.state.equipped = null;
     }
   }
 
-	ignite() {
-		this.fire.ignite();
-		config.state.fires[config.state.map] = true;
-		this.dark = false;
-	}
+  ignite() {
+    this.fire.ignite();
+    config.state.fires[config.state.map] = true;
+    this.dark = false;
+  }
 
   render () {
     //game.debug.spriteInfo(this.player, 32, 32);
-		//game.debug.text(game.time.fps || '--', 2, 14, "#fff");
-		this.game.debug.text(game.time.fps || '--', 2, 14);   
+    //game.debug.text(game.time.fps || '--', 2, 14, "#fff");
+    this.game.debug.text(game.time.fps || '--', 2, 14);   
   }
 
   trigger(x, y) {
@@ -189,7 +189,7 @@ export default class extends Phaser.State {
       }
     } else if (y.props.type == "fire") {
       if (this.spacebar.isDown) {
-				this.ignite();
+	this.ignite();
       }
     }
 
@@ -233,9 +233,9 @@ export default class extends Phaser.State {
   }
 
   update() {
-		var dt = this.game.time.physicsElapsed;
-		if (this.itemPickupCooldown > 0.0)
-			this.itemPickupCooldown -= dt;
+    var dt = this.game.time.physicsElapsed;
+    if (this.itemPickupCooldown > 0.0)
+      this.itemPickupCooldown -= dt;
     this.pushPlatformPhysics(this.player);
     game.physics.arcade.collide([this.player, this.monsters, this.items], this.map.boundaries);
     this.popPlatformPhysics(this.player);
@@ -268,11 +268,11 @@ export default class extends Phaser.State {
 
   updateShadowTexture() {
     if (this.dark) {
-			if (!this.map.properties.dark) {
-				this.shadowTexture.context.fillStyle = 'rgb(100, 100, 100)';
-			} else {
-				this.shadowTexture.context.fillStyle = 'rgb(10, 10, 10)';
-			}
+      if (!this.map.properties.dark) {
+	this.shadowTexture.context.fillStyle = 'rgb(100, 100, 100)';
+      } else {
+	this.shadowTexture.context.fillStyle = 'rgb(10, 10, 10)';
+      }
     } else {
       this.shadowTexture.context.fillStyle = 'rgb(128, 128, 128)';
     }
