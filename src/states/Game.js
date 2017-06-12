@@ -31,12 +31,11 @@ export default class extends Phaser.State {
     }
 
     // background if needed
-    if (!this.map.properties.dark) {
-      var result = this.game.add.tileSprite(0, 0, this.game.world.width, this.game.world.height, 'starfield');
-      result.z = -1;
-      result.tilePosition.y += 2;
-      this.game.world.sort();
-    }
+    this.bg = this.game.add.tileSprite(0, 0, this.game.world.width, this.game.world.height, 'starfield');
+    this.bg.z = -1;
+    this.bg.tilePosition.y += 2;
+    this.bg.anchor.setTo(0.5, 0.5);
+    this.game.world.sort();
 
     // create and add player
     var entranceXY = this.getEntranceXY(config.state.entrance);
@@ -233,6 +232,8 @@ export default class extends Phaser.State {
   }
 
   update() {
+    this.bg.x = (this.camera.x - this.world.width / 2.0) * 0.5 + this.bg.width/2.0;
+    this.bg.y = (this.camera.y - this.world.height / 2.0) * 0.5 + this.bg.height/2.0;
     var dt = this.game.time.physicsElapsed;
     if (this.itemPickupCooldown > 0.0)
       this.itemPickupCooldown -= dt;

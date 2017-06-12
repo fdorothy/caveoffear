@@ -47,6 +47,6 @@ export default {
     entrance: 'game_start',
     equipped: null,
     items: null,
-		fires: null
+    fires: null
   }
 }
