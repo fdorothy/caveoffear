@@ -172,7 +172,7 @@ export default class extends Phaser.State {
   render () {
     //game.debug.spriteInfo(this.player, 32, 32);
     //game.debug.text(game.time.fps || '--', 2, 14, "#fff");
-    this.game.debug.text(game.time.fps || '--', 2, 14);   
+    //this.game.debug.text(game.time.fps || '--', 2, 14);   
   }
 
   trigger(x, y) {
