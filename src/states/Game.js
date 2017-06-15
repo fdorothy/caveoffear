@@ -40,11 +40,12 @@ export default class extends Phaser.State {
       y: entranceXY[1],
       asset: 'hero'
     })
-    this.game.world.addAt(this.player, this.map.spriteLayerIndex+2);
+    this.map.spriteLayer.add(this.player);
     this.game.camera.follow(this.player);
 
     // spawn items
-    this.items = this.game.add.group();
+    this.items = new Phaser.Group(this.game);
+    this.map.spriteLayer.add(this.items);
     if (config.state.items == null)
       config.state.items = {};
     if (config.state.fires == null)
@@ -76,7 +77,8 @@ export default class extends Phaser.State {
 
     // spawn monsters
     if (this.dark) {
-      this.monsters = this.game.add.group();
+      this.monsters = new Phaser.Group(this.game);
+      this.map.spriteLayer.add(this.monsters);
       for (var key in this.map.allObjects) {
 	var monster = this.map.allObjects[key];
 	if (monster.type == "monster") {

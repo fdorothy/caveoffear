@@ -16,6 +16,9 @@ export default class extends Phaser.Tilemap {
     this.layerMap = {};
     this.boundaries = [];
     this.water = [];
+    var spriteLayerName = "";
+    if (this.properties && this.properties.spriteLayer)
+      var spriteLayerName = this.properties.spriteLayer;
     for (var i in this.layers) {
       var info = this.layers[i];
       var name = info.name;
@@ -30,7 +33,12 @@ export default class extends Phaser.Tilemap {
       layer.alpha = info.alpha;
       layer.resizeWorld();
       this.layerMap[info.name] = layer;
+      if (name == spriteLayerName) {
+        this.spriteLayer = this.game.add.group();
+      }
     }
+    if (this.spriteLayer == null)
+      this.spriteLayer = this.game.add.group();
 
     // load all objects
     this.triggers = [];
@@ -48,15 +56,6 @@ export default class extends Phaser.Tilemap {
 	sprite.props = props;
 	this.triggers.push(sprite);
       }
-    }
-
-    // extract properties or use defaults
-    this.spriteLayerIndex = 0;
-    if (this.properties && this.properties.spriteLayer) {
-      var layerName = this.properties.spriteLayer;
-      this.spriteLayerIndex = this.layerMap[layerName].z;
-    } else if (this.spriteLayerIndex == 0 && this.boundaries.length > 0) {
-      this.spriteLayerIndex = this.map.boundaries[0].z;
     }
   }
 
