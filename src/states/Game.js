@@ -59,9 +59,9 @@ export default class extends Phaser.State {
     this.lightSprite.blendMode = Phaser.blendModes.MULTIPLY;
     var style = {
       font: 'bold 16px Belgrano',
-      fill: '#222288',
+      fill: '#000',
       align: 'center',
-      backgroundColor: 'rgba(255, 255, 255, 0.2)',
+      backgroundColor: 'rgba(255, 255, 255, 0.4)',
       boundsAlignH: "center",
       boundsAlignV: "middle",
     };
@@ -204,9 +204,15 @@ export default class extends Phaser.State {
   }
 
   warp(props) {
-    config.state.map = props.map;
-    config.state.entrance = props.entrance;
-    this.state.start('Warp');
+    if (props != null && config.levels[props.map] != null) {
+      config.state.map = props.map;
+      config.state.entrance = props.entrance;
+      this.state.start('Warp');
+    } else {
+      this.tooltip.text = "undeveloped";
+      this.tooltip.x = this.camera.x + this.game.width/2.0;
+      this.tooltip.y = this.camera.y + this.game.height/2.0;
+    }
   }
 
   getEntranceXY(entrance_name) {
