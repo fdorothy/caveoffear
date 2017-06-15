@@ -134,6 +134,52 @@
                  "width":38.6667,
                  "x":343.919,
                  "y":454.854
+                }, 
+                {
+                 "height":62,
+                 "id":7,
+                 "name":"right_door",
+                 "properties":
+                    {
+                     "entrance":"left_door",
+                     "map":"playground",
+                     "tooltip":"door"
+                    },
+                 "propertytypes":
+                    {
+                     "entrance":"string",
+                     "map":"string",
+                     "tooltip":"string"
+                    },
+                 "rotation":0,
+                 "type":"door",
+                 "visible":true,
+                 "width":29.6667,
+                 "x":484.252990794884,
+                 "y":353.878940155322
+                }, 
+                {
+                 "height":62,
+                 "id":8,
+                 "name":"left_door",
+                 "properties":
+                    {
+                     "entrance":"right_door",
+                     "map":"playground",
+                     "tooltip":"door"
+                    },
+                 "propertytypes":
+                    {
+                     "entrance":"string",
+                     "map":"string",
+                     "tooltip":"string"
+                    },
+                 "rotation":0,
+                 "type":"door",
+                 "visible":true,
+                 "width":29.6667,
+                 "x":162.18812099132,
+                 "y":351.594792142531
                 }],
          "opacity":1,
          "type":"objectgroup",
@@ -141,7 +187,7 @@
          "x":0,
          "y":0
         }],
- "nextobjectid":7,
+ "nextobjectid":9,
  "orientation":"orthogonal",
  "properties":
     {

@@ -1,11 +1,14 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.0" tiledversion="1.0.1" orientation="orthogonal" renderorder="right-down" width="20" height="20" tilewidth="32" tileheight="32" nextobjectid="7">
+<map version="1.0" tiledversion="1.0.1" orientation="orthogonal" renderorder="right-down" width="20" height="20" tilewidth="32" tileheight="32" nextobjectid="9">
  <properties>
   <property name="dark" type="bool" value="true"/>
   <property name="name" value="playground"/>
   <property name="spriteLayer" value="bounds"/>
  </properties>
- <tileset firstgid="1" source="cavetiles.tsx"/>
+ <tileset firstgid="1" name="cavetiles" tilewidth="32" tileheight="32" tilecount="48" columns="8">
+  <image source="../assets/images/cavetiles.png" width="256" height="192"/>
+  <tile id="19" probability="0.25"/>
+ </tileset>
  <layer name="background" width="20" height="20">
   <data encoding="csv">
 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
@@ -109,7 +112,7 @@
 </data>
  </layer>
  <objectgroup name="items">
-  <object id="1" name="fire" type="fire_spawn" x="286.131" y="480.554" width="31.75" height="31.5"/>
+  <object id="1" name="fire" type="fire_spawn" x="280.421" y="479.412" width="31.75" height="31.5"/>
   <object id="2" name="mummy" type="monster" x="481.804" y="567.505" width="29" height="35">
    <properties>
     <property name="name" value="mummy"/>
@@ -122,5 +125,19 @@
   </object>
   <object id="4" name="flashlight" type="item_spawn" x="350.864" y="477.08" width="29" height="30"/>
   <object id="5" name="game_start" type="entrance" x="343.919" y="454.854" width="38.6667" height="53.3333"/>
+  <object id="7" name="right_door" type="door" x="484.253" y="353.879" width="29.6667" height="62">
+   <properties>
+    <property name="entrance" value="left_door"/>
+    <property name="map" value="playground"/>
+    <property name="tooltip" value="door"/>
+   </properties>
+  </object>
+  <object id="8" name="left_door" type="door" x="162.188" y="351.595" width="29.6667" height="62">
+   <properties>
+    <property name="entrance" value="right_door"/>
+    <property name="map" value="playground"/>
+    <property name="tooltip" value="door"/>
+   </properties>
+  </object>
  </objectgroup>
 </map>
