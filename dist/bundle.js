@@ -466,6 +466,7 @@ exports.default = {
     groundDeaccel: 500
   },
   levels: {
+    playground: 'assets/maps/playground.json',
     island1: 'assets/maps/island1.json',
     hallway: 'assets/maps/hallway.json',
     drop1: 'assets/maps/drop1.json',
@@ -4824,9 +4825,9 @@ var _class = function (_Phaser$State) {
       this.lightSprite.blendMode = _phaser2.default.blendModes.MULTIPLY;
       var style = {
         font: 'bold 16px Belgrano',
-        fill: '#222288',
+        fill: '#000',
         align: 'center',
-        backgroundColor: 'rgba(255, 255, 255, 0.2)',
+        backgroundColor: 'rgba(255, 255, 255, 0.4)',
         boundsAlignH: "center",
         boundsAlignV: "middle"
       };
@@ -4940,7 +4941,7 @@ var _class = function (_Phaser$State) {
     value: function render() {
       //game.debug.spriteInfo(this.player, 32, 32);
       //game.debug.text(game.time.fps || '--', 2, 14, "#fff");
-      this.game.debug.text(game.time.fps || '--', 2, 14);
+      //this.game.debug.text(game.time.fps || '--', 2, 14);   
     }
   }, {
     key: 'trigger',
@@ -4974,9 +4975,15 @@ var _class = function (_Phaser$State) {
   }, {
     key: 'warp',
     value: function warp(props) {
-      _config2.default.state.map = props.map;
-      _config2.default.state.entrance = props.entrance;
-      this.state.start('Warp');
+      if (props != null && _config2.default.levels[props.map] != null) {
+        _config2.default.state.map = props.map;
+        _config2.default.state.entrance = props.entrance;
+        this.state.start('Warp');
+      } else {
+        this.tooltip.text = "undeveloped";
+        this.tooltip.x = this.camera.x + this.game.width / 2.0;
+        this.tooltip.y = this.camera.y + this.game.height / 2.0;
+      }
     }
   }, {
     key: 'getEntranceXY',

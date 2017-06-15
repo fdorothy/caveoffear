@@ -17,6 +17,7 @@ export default {
     groundDeaccel: 500
   },
   levels: {
+    playground: 'assets/maps/playground.json',
     island1: 'assets/maps/island1.json',
     hallway: 'assets/maps/hallway.json',
     drop1: 'assets/maps/drop1.json',
