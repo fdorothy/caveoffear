@@ -6,10 +6,6 @@ export default class extends Phaser.State {
   init () {}
 
   preload () {
-    this.space = this.game.input.keyboard.addKey(Phaser.Keyboard.SPACEBAR);
-    this.game.input.keyboard.addKeyCapture([
-    	Phaser.Keyboard.SPACEBAR
-    ]);
   }
 
   create () {
@@ -21,6 +17,10 @@ export default class extends Phaser.State {
     this.game.add.tween(this.text).to({alpha: 1}, 1000, "Linear", true);
     this.text.anchor.setTo(0.5, 0.5)
     this.totalTime = 3.0;
+    this.space = this.game.input.keyboard.addKey(Phaser.Keyboard.SPACEBAR);
+    this.game.input.keyboard.addKeyCapture([
+      Phaser.Keyboard.SPACEBAR
+    ]);
   }
 
   update() {

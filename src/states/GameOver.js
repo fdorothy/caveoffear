@@ -14,18 +14,23 @@ export default class extends Phaser.State {
     this.game.add.tween(this.text).to({alpha: 1}, 1000, "Linear", true);
     this.text.anchor.setTo(0.5, 0.5)
     this.totalTime = 3.0;
-
-    //var retry = game.make.sprite(this.world.centerX, this.game.height / 2.0, 'retry');
-    this.text.inputEnabled = true;
-    this.text.input.priorityID = 1;
-    this.text.input.useHandCursor = true;
-    this.text.events.onInputDown.add(this.onretry, this);
+    this.space = this.game.input.keyboard.addKey(Phaser.Keyboard.SPACEBAR);
+    this.game.input.keyboard.addKeyCapture([
+      Phaser.Keyboard.SPACEBAR
+    ]);
   }
 
-  onretry () {
-    this.state.start('Splash');
+  render () {
   }
 
-render () {
+  update() {
+    var dt = this.game.time.physicsElapsed;
+    this.totalTime -= dt;
+    if (this.totalTime <= 1.0 && this.totalTime > 0.0) {
+      this.text.alpha = this.totalTime;
+    }
+    if (this.totalTime <= 0.0 || this.space.isDown) {
+      this.state.start('Splash')
+    }
   }
 }
