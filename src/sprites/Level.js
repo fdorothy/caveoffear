@@ -49,6 +49,15 @@ export default class extends Phaser.Tilemap {
 	this.triggers.push(sprite);
       }
     }
+
+    // extract properties or use defaults
+    this.spriteLayerIndex = 0;
+    if (this.properties && this.properties.spriteLayer) {
+      var layerName = this.properties.spriteLayer;
+      this.spriteLayerIndex = this.layerMap[layerName].z;
+    } else if (this.spriteLayerIndex == 0 && this.boundaries.length > 0) {
+      this.spriteLayerIndex = this.map.boundaries[0].z;
+    }
   }
 
   update () {

@@ -25,11 +25,6 @@ export default class extends Phaser.State {
       asset: config.state.map
     });
 
-    this.spriteLayerIndex = 0;
-    if (this.map.boundaries.length > 0) {
-      this.spriteLayerIndex = this.map.boundaries[0].z;
-    }
-
     // background if needed
     this.bg = this.game.add.tileSprite(0, 0, this.game.world.width, this.game.world.height, 'starfield');
     this.bg.z = -1;
@@ -45,7 +40,7 @@ export default class extends Phaser.State {
       y: entranceXY[1],
       asset: 'hero'
     })
-    this.game.world.addAt(this.player, this.spriteLayerIndex+1);
+    this.game.world.addAt(this.player, this.map.spriteLayerIndex+2);
     this.game.camera.follow(this.player);
 
     // spawn items
