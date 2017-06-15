@@ -4223,6 +4223,8 @@ var _class = function (_Phaser$Tilemap) {
     _this.layerMap = {};
     _this.boundaries = [];
     _this.water = [];
+    var spriteLayerName = "";
+    if (_this.properties && _this.properties.spriteLayer) var spriteLayerName = _this.properties.spriteLayer;
     for (var i in _this.layers) {
       var info = _this.layers[i];
       var name = info.name;
@@ -4237,7 +4239,11 @@ var _class = function (_Phaser$Tilemap) {
       layer.alpha = info.alpha;
       layer.resizeWorld();
       _this.layerMap[info.name] = layer;
+      if (name == spriteLayerName) {
+        _this.spriteLayer = _this.game.add.group();
+      }
     }
+    if (_this.spriteLayer == null) _this.spriteLayer = _this.game.add.group();
 
     // load all objects
     _this.triggers = [];
@@ -4785,22 +4791,17 @@ var _class = function (_Phaser$State) {
       this.game.time.advancedTiming = true;
       this.itemPickupCooldown = 1.0;
 
+      this.backgroundLayer = this.game.add.group();
       this.map = new _Level2.default({
         game: this.game,
         asset: _config2.default.state.map
       });
 
-      this.spriteLayerIndex = 0;
-      if (this.map.boundaries.length > 0) {
-        this.spriteLayerIndex = this.map.boundaries[0].z;
-      }
-
       // background if needed
-      this.bg = this.game.add.tileSprite(0, 0, this.game.world.width, this.game.world.height, 'starfield');
-      this.bg.z = -1;
+      this.bg = new _phaser2.default.TileSprite(this.game, 0, 0, this.game.world.width, this.game.world.height, 'starfield');
       this.bg.tilePosition.y += 2;
       this.bg.anchor.setTo(0.5, 0.5);
-      this.game.world.sort();
+      this.backgroundLayer.add(this.bg);
 
       // create and add player
       var entranceXY = this.getEntranceXY(_config2.default.state.entrance);
@@ -4810,11 +4811,33 @@ var _class = function (_Phaser$State) {
         y: entranceXY[1],
         asset: 'hero'
       });
-      this.game.world.addAt(this.player, this.spriteLayerIndex + 1);
+      this.map.spriteLayer.add(this.player);
       this.game.camera.follow(this.player);
 
+      this.cursor = this.game.input.keyboard.createCursorKeys();
+      this.spacebar = this.game.input.keyboard.addKey(_phaser2.default.Keyboard.SPACEBAR);
+      this.dropkey = this.game.input.keyboard.addKey(_phaser2.default.Keyboard.D);
+      this.game.input.keyboard.addKeyCapture([_phaser2.default.Keyboard.LEFT, _phaser2.default.Keyboard.RIGHT, _phaser2.default.Keyboard.UP, _phaser2.default.Keyboard.DOWN, _phaser2.default.Keyboard.SPACEBAR]);
+
+      this.shadowTexture = this.game.add.bitmapData(this.game.width + 100, this.game.height + 100);
+      this.lightSprite = this.game.add.image(this.game.camera.x - 50, this.game.camera.y - 50, this.shadowTexture);
+      this.lightSprite.blendMode = _phaser2.default.blendModes.MULTIPLY;
+      var style = {
+        font: 'bold 16px Belgrano',
+        fill: '#222288',
+        align: 'center',
+        backgroundColor: 'rgba(255, 255, 255, 0.2)',
+        boundsAlignH: "center",
+        boundsAlignV: "middle"
+      };
+      this.tooltip = this.add.text(this.player.x, this.player.y, '', style);
+      this.tooltip.anchor.setTo(0.5, 0.5);
+
+      this.emitterLayer = this.game.add.group();
+
       // spawn items
-      this.items = this.game.add.group();
+      this.items = new _phaser2.default.Group(this.game);
+      this.map.spriteLayer.add(this.items);
       if (_config2.default.state.items == null) _config2.default.state.items = {};
       if (_config2.default.state.fires == null) _config2.default.state.fires = {};
       for (var key in _config2.default.state.items) {
@@ -4843,7 +4866,8 @@ var _class = function (_Phaser$State) {
 
       // spawn monsters
       if (this.dark) {
-        this.monsters = this.game.add.group();
+        this.monsters = new _phaser2.default.Group(this.game);
+        this.map.spriteLayer.add(this.monsters);
         for (var key in this.map.allObjects) {
           var monster = this.map.allObjects[key];
           if (monster.type == "monster") {
@@ -4857,25 +4881,6 @@ var _class = function (_Phaser$State) {
           }
         }
       }
-
-      this.cursor = this.game.input.keyboard.createCursorKeys();
-      this.spacebar = this.game.input.keyboard.addKey(_phaser2.default.Keyboard.SPACEBAR);
-      this.dropkey = this.game.input.keyboard.addKey(_phaser2.default.Keyboard.D);
-      this.game.input.keyboard.addKeyCapture([_phaser2.default.Keyboard.LEFT, _phaser2.default.Keyboard.RIGHT, _phaser2.default.Keyboard.UP, _phaser2.default.Keyboard.DOWN, _phaser2.default.Keyboard.SPACEBAR]);
-
-      this.shadowTexture = this.game.add.bitmapData(this.game.width + 100, this.game.height + 100);
-      this.lightSprite = this.game.add.image(this.game.camera.x - 50, this.game.camera.y - 50, this.shadowTexture);
-      this.lightSprite.blendMode = _phaser2.default.blendModes.MULTIPLY;
-      var style = {
-        font: 'bold 16px Belgrano',
-        fill: '#222288',
-        align: 'center',
-        backgroundColor: 'rgba(255, 255, 255, 0.2)',
-        boundsAlignH: "center",
-        boundsAlignV: "middle"
-      };
-      this.tooltip = this.add.text(this.player.x, this.player.y, '', style);
-      this.tooltip.anchor.setTo(0.5, 0.5);
     }
   }, {
     key: 'spawnItem',
@@ -4888,6 +4893,7 @@ var _class = function (_Phaser$State) {
       });
       sprite.props = { name: name, type: "item", properties: { tooltip: name } };
       this.items.add(sprite);
+      this.emitterLayer.add(sprite.emitter);
       this.updateItemState(sprite);
       return sprite;
     }
@@ -5141,21 +5147,24 @@ var _class = function (_Phaser$State) {
       this.game.add.tween(this.text).to({ alpha: 1 }, 1000, "Linear", true);
       this.text.anchor.setTo(0.5, 0.5);
       this.totalTime = 3.0;
-
-      //var retry = game.make.sprite(this.world.centerX, this.game.height / 2.0, 'retry');
-      this.text.inputEnabled = true;
-      this.text.input.priorityID = 1;
-      this.text.input.useHandCursor = true;
-      this.text.events.onInputDown.add(this.onretry, this);
-    }
-  }, {
-    key: 'onretry',
-    value: function onretry() {
-      this.state.start('Splash');
+      this.space = this.game.input.keyboard.addKey(_phaser2.default.Keyboard.SPACEBAR);
+      this.game.input.keyboard.addKeyCapture([_phaser2.default.Keyboard.SPACEBAR]);
     }
   }, {
     key: 'render',
     value: function render() {}
+  }, {
+    key: 'update',
+    value: function update() {
+      var dt = this.game.time.physicsElapsed;
+      this.totalTime -= dt;
+      if (this.totalTime <= 1.0 && this.totalTime > 0.0) {
+        this.text.alpha = this.totalTime;
+      }
+      if (this.totalTime <= 0.0 || this.space.isDown) {
+        this.state.start('Splash');
+      }
+    }
   }]);
 
   return _class;
@@ -5297,10 +5306,7 @@ var _class = function (_Phaser$State) {
     value: function init() {}
   }, {
     key: 'preload',
-    value: function preload() {
-      this.space = this.game.input.keyboard.addKey(_phaser2.default.Keyboard.SPACEBAR);
-      this.game.input.keyboard.addKeyCapture([_phaser2.default.Keyboard.SPACEBAR]);
-    }
+    value: function preload() {}
   }, {
     key: 'create',
     value: function create() {
@@ -5310,6 +5316,8 @@ var _class = function (_Phaser$State) {
       this.game.add.tween(this.text).to({ alpha: 1 }, 1000, "Linear", true);
       this.text.anchor.setTo(0.5, 0.5);
       this.totalTime = 3.0;
+      this.space = this.game.input.keyboard.addKey(_phaser2.default.Keyboard.SPACEBAR);
+      this.game.input.keyboard.addKeyCapture([_phaser2.default.Keyboard.SPACEBAR]);
     }
   }, {
     key: 'update',
@@ -11093,7 +11101,7 @@ module.exports = __webpack_require__(/*! ./modules/_core */ 26);
 /***/ (function(module, exports, __webpack_require__) {
 
 __webpack_require__(/*! babel-polyfill */122);
-module.exports = __webpack_require__(/*! /Users/fredricdorothy/work/phaser/caveoffear/src/main.js */121);
+module.exports = __webpack_require__(/*! /Users/fredricdorothy/personal/games/caveoffear/src/main.js */121);
 
 
 /***/ })

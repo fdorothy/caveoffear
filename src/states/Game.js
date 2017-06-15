@@ -20,17 +20,17 @@ export default class extends Phaser.State {
     this.game.time.advancedTiming = true;
     this.itemPickupCooldown = 1.0;
 
+    this.backgroundLayer = this.game.add.group();
     this.map = new Level({
       game: this.game,
       asset: config.state.map
     });
 
     // background if needed
-    this.bg = this.game.add.tileSprite(0, 0, this.game.world.width, this.game.world.height, 'starfield');
-    this.bg.z = -1;
+    this.bg = new Phaser.TileSprite(this.game, 0, 0, this.game.world.width, this.game.world.height, 'starfield');
     this.bg.tilePosition.y += 2;
     this.bg.anchor.setTo(0.5, 0.5);
-    this.game.world.sort();
+    this.backgroundLayer.add(this.bg);
 
     // create and add player
     var entranceXY = this.getEntranceXY(config.state.entrance);
