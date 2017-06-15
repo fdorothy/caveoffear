@@ -43,6 +43,33 @@ export default class extends Phaser.State {
     this.map.spriteLayer.add(this.player);
     this.game.camera.follow(this.player);
 
+    this.cursor = this.game.input.keyboard.createCursorKeys();
+    this.spacebar = this.game.input.keyboard.addKey(Phaser.Keyboard.SPACEBAR);
+    this.dropkey = this.game.input.keyboard.addKey(Phaser.Keyboard.D);
+    this.game.input.keyboard.addKeyCapture([
+      Phaser.Keyboard.LEFT,
+      Phaser.Keyboard.RIGHT,
+      Phaser.Keyboard.UP,
+      Phaser.Keyboard.DOWN,
+      Phaser.Keyboard.SPACEBAR
+    ]);
+
+    this.shadowTexture = this.game.add.bitmapData(this.game.width+100, this.game.height+100);
+    this.lightSprite = this.game.add.image(this.game.camera.x-50, this.game.camera.y-50, this.shadowTexture);
+    this.lightSprite.blendMode = Phaser.blendModes.MULTIPLY;
+    var style = {
+      font: 'bold 16px Belgrano',
+      fill: '#222288',
+      align: 'center',
+      backgroundColor: 'rgba(255, 255, 255, 0.2)',
+      boundsAlignH: "center",
+      boundsAlignV: "middle",
+    };
+    this.tooltip = this.add.text(this.player.x, this.player.y, '', style);
+    this.tooltip.anchor.setTo(0.5, 0.5);
+
+    this.emitterLayer = this.game.add.group();
+
     // spawn items
     this.items = new Phaser.Group(this.game);
     this.map.spriteLayer.add(this.items);
@@ -92,31 +119,6 @@ export default class extends Phaser.State {
 	}
       }
     }
-
-    this.cursor = this.game.input.keyboard.createCursorKeys();
-    this.spacebar = this.game.input.keyboard.addKey(Phaser.Keyboard.SPACEBAR);
-    this.dropkey = this.game.input.keyboard.addKey(Phaser.Keyboard.D);
-    this.game.input.keyboard.addKeyCapture([
-      Phaser.Keyboard.LEFT,
-      Phaser.Keyboard.RIGHT,
-      Phaser.Keyboard.UP,
-      Phaser.Keyboard.DOWN,
-      Phaser.Keyboard.SPACEBAR
-    ]);
-
-    this.shadowTexture = this.game.add.bitmapData(this.game.width+100, this.game.height+100);
-    this.lightSprite = this.game.add.image(this.game.camera.x-50, this.game.camera.y-50, this.shadowTexture);
-    this.lightSprite.blendMode = Phaser.blendModes.MULTIPLY;
-    var style = {
-      font: 'bold 16px Belgrano',
-      fill: '#222288',
-      align: 'center',
-      backgroundColor: 'rgba(255, 255, 255, 0.2)',
-      boundsAlignH: "center",
-      boundsAlignV: "middle",
-    };
-    this.tooltip = this.add.text(this.player.x, this.player.y, '', style);
-    this.tooltip.anchor.setTo(0.5, 0.5);
   }
 
   spawnItem(name, x, y) {
@@ -128,6 +130,7 @@ export default class extends Phaser.State {
     });
     sprite.props = {name: name, type: "item", properties: {tooltip: name}}
     this.items.add(sprite);
+    this.emitterLayer.add(sprite.emitter);
     this.updateItemState(sprite);
     return sprite;
   }
