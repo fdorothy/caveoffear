@@ -4922,11 +4922,13 @@ var _class = function (_Phaser$State) {
     key: 'dropItem',
     value: function dropItem() {
       if (_config2.default.state.equipped != null) {
-        var sprite = this.spawnItem(_config2.default.state.equipped, this.player.x, this.player.y);
-        sprite.body.velocity.x = this.player.body.velocity.x * 3;
-        sprite.body.velocity.y = this.player.body.velocity.y * 2;
-        this.game.add.tween(sprite.body.velocity).to({ x: 0 }, 1200, _phaser2.default.Easing.Linear.None, true);
-        _config2.default.state.equipped = null;
+        if (_config2.default.state.equipped == 'flashlight' && !_config2.default.state.fires[_config2.default.state.map]) {} else {
+          var sprite = this.spawnItem(_config2.default.state.equipped, this.player.x, this.player.y);
+          sprite.body.velocity.x = this.player.body.velocity.x * 3;
+          sprite.body.velocity.y = this.player.body.velocity.y * 2;
+          this.game.add.tween(sprite.body.velocity).to({ x: 0 }, 1200, _phaser2.default.Easing.Linear.None, true);
+          _config2.default.state.equipped = null;
+        }
       }
     }
   }, {
@@ -4976,9 +4978,15 @@ var _class = function (_Phaser$State) {
     key: 'warp',
     value: function warp(props) {
       if (props != null && _config2.default.levels[props.map] != null) {
-        _config2.default.state.map = props.map;
-        _config2.default.state.entrance = props.entrance;
-        this.state.start('Warp');
+        if (_config2.default.state.equipped == 'flashlight' || _config2.default.state.fires[props.map]) {
+          _config2.default.state.map = props.map;
+          _config2.default.state.entrance = props.entrance;
+          this.state.start('Warp');
+        } else {
+          this.tooltip.text = "it's too dark";
+          this.tooltip.x = this.camera.x + this.game.width / 2.0;
+          this.tooltip.y = this.camera.y + this.game.height / 2.0;
+        }
       } else {
         this.tooltip.text = "undeveloped";
         this.tooltip.x = this.camera.x + this.game.width / 2.0;

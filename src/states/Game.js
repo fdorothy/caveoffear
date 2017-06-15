@@ -155,11 +155,14 @@ export default class extends Phaser.State {
 
   dropItem() {
     if (config.state.equipped != null) {
-      var sprite = this.spawnItem(config.state.equipped, this.player.x, this.player.y);
-      sprite.body.velocity.x = this.player.body.velocity.x * 3;
-      sprite.body.velocity.y = this.player.body.velocity.y * 2;
-      this.game.add.tween(sprite.body.velocity).to({x: 0}, 1200, Phaser.Easing.Linear.None, true);
-      config.state.equipped = null;
+      if (config.state.equipped == 'flashlight' && !config.state.fires[config.state.map]) {
+      } else {
+        var sprite = this.spawnItem(config.state.equipped, this.player.x, this.player.y);
+        sprite.body.velocity.x = this.player.body.velocity.x * 3;
+        sprite.body.velocity.y = this.player.body.velocity.y * 2;
+        this.game.add.tween(sprite.body.velocity).to({x: 0}, 1200, Phaser.Easing.Linear.None, true);
+        config.state.equipped = null;
+      }
     }
   }
 
@@ -205,9 +208,15 @@ export default class extends Phaser.State {
 
   warp(props) {
     if (props != null && config.levels[props.map] != null) {
-      config.state.map = props.map;
-      config.state.entrance = props.entrance;
-      this.state.start('Warp');
+      if (config.state.equipped == 'flashlight' || config.state.fires[props.map]) {
+        config.state.map = props.map;
+        config.state.entrance = props.entrance;
+        this.state.start('Warp');
+      } else {
+        this.tooltip.text = "it's too dark";
+        this.tooltip.x = this.camera.x + this.game.width/2.0;
+        this.tooltip.y = this.camera.y + this.game.height/2.0;
+      }
     } else {
       this.tooltip.text = "undeveloped";
       this.tooltip.x = this.camera.x + this.game.width/2.0;
