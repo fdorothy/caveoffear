@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.0" tiledversion="1.0.1" orientation="orthogonal" renderorder="right-down" width="20" height="20" tilewidth="32" tileheight="32" nextobjectid="9">
+<map version="1.0" tiledversion="1.0.1" orientation="orthogonal" renderorder="right-down" width="20" height="20" tilewidth="32" tileheight="32" nextobjectid="11">
  <properties>
   <property name="dark" type="bool" value="true"/>
   <property name="name" value="playground"/>
@@ -139,5 +139,7 @@
     <property name="tooltip" value="door"/>
    </properties>
   </object>
+  <object id="9" name="flaregun" type="item_spawn" x="227.62" y="478.376" width="29" height="30"/>
+  <object id="10" name="radio" type="item_spawn" x="172.8" y="478.376" width="29" height="30"/>
  </objectgroup>
 </map>

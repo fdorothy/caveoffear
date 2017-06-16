@@ -102,6 +102,24 @@ export default class extends Phaser.State {
     }
     this.dark = !config.state.fires[config.state.map];
 
+    // create a weapon, only used if we have the flaregun
+    var w = game.add.weapon(1, 'diamond');
+    w.setBulletFrames(0, 80, true);
+    w.bulletKillType = Phaser.Weapon.KILL_WORLD_BOUNDS;
+    w.bulletSpeed = 400;
+    w.fireRate = 50;
+    w.trackSprite(this.player, 0, 0, false);
+    w.bulletGravity.y = 250;
+    w.onFire.add(this.onFire, this);
+    w.onKill.add(this.onKill, this);
+    this.flaregun = w;
+    this.fireButton = this.input.keyboard.addKey(Phaser.KeyCode.ENTER);
+    this.flareemitter = game.add.emitter(0, 0, 1000);
+    this.flareemitter.makeParticles('diamond');
+    this.flareemitter.gravity = 2;
+    this.emitterLayer.add(this.flareemitter);
+    //this.flareemitter.start(true, 500, null, 10);
+    
     // spawn monsters
     if (this.dark) {
       this.monsters = new Phaser.Group(this.game);
@@ -247,6 +265,14 @@ export default class extends Phaser.State {
   }
 
   update() {
+    if (this.bullet) {
+      this.flareemitter.x = this.bullet.x;
+      this.flareemitter.y = this.bullet.y;
+      var vx = this.bullet.body.velocity.x;
+      var vy = this.bullet.body.velocity.y;
+      this.flareemitter.setXSpeed((vx - 20) / 10.0, (vx + 20) / 20.0);
+      this.flareemitter.setYSpeed((vy - 20) / 10.0, (vy + 20) / 20.0);
+    }
     this.bg.x = (this.camera.x - this.world.width / 2.0) * 0.5 + this.bg.width/2.0;
     this.bg.y = (this.camera.y - this.world.height / 2.0) * 0.5 + this.bg.height/2.0;
     var dt = this.game.time.physicsElapsed;
@@ -286,6 +312,15 @@ export default class extends Phaser.State {
     if (this.dropkey.isDown) {
       this.dropItem();
     }
+    if (this.fireButton.isDown && config.state.equipped == 'flaregun') {
+      if (this.player.scale.x < 0.0)
+        this.flaregun.fireAngle = -100;
+      else
+        this.flaregun.fireAngle = -80;
+      this.flaregun.fire();
+      //config.state.equipped = null;
+      //delete config.state.items['flaregun'];
+    }
     this.lightSprite.reset(game.camera.x-50, game.camera.y-50);
     this.updateShadowTexture();
   }
@@ -323,5 +358,17 @@ export default class extends Phaser.State {
     this.shadowTexture.context.fill();
 
     this.shadowTexture.dirty = true;
+  }
+
+  onFire(bullet, weapon) {
+    this.flareemitter.x = bullet.x;
+    this.flareemitter.y = bullet.y;
+    this.flareemitter.start(false, 10000, 10, 100);
+    this.bullet = bullet;
+  }
+
+  onKill(bullet) {
+    this.flareemitter.on = false;
+    this.bullet = null;
   }
 }
