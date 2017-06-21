@@ -118,7 +118,6 @@ export default class extends Phaser.State {
     this.flareemitter.makeParticles('diamond');
     this.flareemitter.gravity = 2;
     this.emitterLayer.add(this.flareemitter);
-    //this.flareemitter.start(true, 500, null, 10);
     
     // spawn monsters
     if (this.dark) {
