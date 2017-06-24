@@ -50,4 +50,18 @@ export default {
     items: null,
     fires: null
   }
+  // state: {
+  //   map: 'drop1',
+  //   entrance: 'entrance_left',
+  //   equipped: 'flashlight',
+  //   items: null,
+  //   fires: null
+  // }
+  // state: {
+  //   map: 'island1',
+  //   entrance: 'game_start',
+  //   equipped: null,
+  //   items: null,
+  //   fires: null
+  // }
 }

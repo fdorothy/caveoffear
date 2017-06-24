@@ -65,8 +65,15 @@ export default class extends Phaser.State {
       boundsAlignH: "center",
       boundsAlignV: "middle",
     };
+
+    // tooltip that appears above items
     this.tooltip = this.add.text(this.player.x, this.player.y, '', style);
     this.tooltip.anchor.setTo(0.5, 0.5);
+
+    // message that appears in center of screen
+    this.message = this.add.text(0, 0, '', style)
+    this.message.anchor.setTo(0.5, 0.5);
+    this.messageTime = 0.0;
 
     this.emitterLayer = this.game.add.group();
 
@@ -230,14 +237,18 @@ export default class extends Phaser.State {
         config.state.entrance = props.entrance;
         this.state.start('Warp');
       } else {
-        this.tooltip.text = "it's too dark";
-        this.tooltip.x = this.camera.x + this.game.width/2.0;
-        this.tooltip.y = this.camera.y + this.game.height/2.0;
+        this.setMessageText("it's too dark");
       }
     } else {
-      this.tooltip.text = "undeveloped";
-      this.tooltip.x = this.camera.x + this.game.width/2.0;
-      this.tooltip.y = this.camera.y + this.game.height/2.0;
+      this.setMessageText("cannot fit");
+    }
+  }
+
+  setMessageText(text) {
+    if (text != this.message.text) {
+      this.message.text = text;
+      this.messageTime = 5.0;
+      this.message.visible = true;
     }
   }
 
@@ -264,6 +275,9 @@ export default class extends Phaser.State {
   }
 
   update() {
+    var dt = this.game.time.physicsElapsed;
+
+    // emit from the flaregun's bullet if active
     if (this.bullet) {
       this.flareemitter.x = this.bullet.x;
       this.flareemitter.y = this.bullet.y;
@@ -272,15 +286,20 @@ export default class extends Phaser.State {
       this.flareemitter.setXSpeed((vx - 20) / 10.0, (vx + 20) / 20.0);
       this.flareemitter.setYSpeed((vy - 20) / 10.0, (vy + 20) / 20.0);
     }
+
+    // set our message text to center of screen
+    this.updateMessage(dt);
+    
+    // clear the tooltip and message texts
+    this.tooltip.text = '';
+
     this.bg.x = (this.camera.x - this.world.width / 2.0) * 0.5 + this.bg.width/2.0;
     this.bg.y = (this.camera.y - this.world.height / 2.0) * 0.5 + this.bg.height/2.0;
-    var dt = this.game.time.physicsElapsed;
     if (this.itemPickupCooldown > 0.0)
       this.itemPickupCooldown -= dt;
     this.pushPlatformPhysics(this.player);
     game.physics.arcade.collide([this.player, this.monsters, this.items], this.map.boundaries);
     this.popPlatformPhysics(this.player);
-    this.tooltip.text = '';
 
     this.player.underwater = false;
     for (var idx in this.map.water) {
@@ -322,6 +341,17 @@ export default class extends Phaser.State {
     }
     this.lightSprite.reset(game.camera.x-50, game.camera.y-50);
     this.updateShadowTexture();
+  }
+
+  updateMessage(dt) {
+    if (this.messageTime > 0.0) {
+      this.message.x = this.player.x;
+      this.message.y = this.player.y - 32;
+      this.messageTime -= dt;
+    } else {
+      this.message.text = '';
+      this.message.visible = false;
+    }
   }
 
   updateShadowTexture() {
