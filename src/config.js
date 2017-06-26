@@ -43,25 +43,31 @@ export default {
     diamond: 'assets/images/diamond.png',
     starfield: 'assets/images/starfield.png',
   },
-  state: {
-    map: 'playground',
-    entrance: 'game_start',
-    equipped: 'flashlight',
-    items: null,
-    fires: null
-  }
+  // state: {
+  //   map: 'playground',
+  //   entrance: 'game_start',
+  //   equipped: 'flashlight',
+  //   items: null,
+  //   fires: null,
+  //   rescueTime: 0.0,
+  //   rescued: false
+  // }
   // state: {
   //   map: 'drop1',
   //   entrance: 'entrance_left',
   //   equipped: 'flashlight',
   //   items: null,
-  //   fires: null
+  //   fires: null,
+  //   rescueTime: 0.0,
+  //   rescued: false
   // }
-  // state: {
-  //   map: 'island1',
-  //   entrance: 'game_start',
-  //   equipped: null,
-  //   items: null,
-  //   fires: null
-  // }
+  state: {
+    map: 'island1',
+    entrance: 'game_start',
+    equipped: null,
+    items: null,
+    fires: null,
+    rescueTime: 0.0,
+    rescued: false
+  }
 }

@@ -492,12 +492,32 @@ exports.default = {
     diamond: 'assets/images/diamond.png',
     starfield: 'assets/images/starfield.png'
   },
+  // state: {
+  //   map: 'playground',
+  //   entrance: 'game_start',
+  //   equipped: 'flashlight',
+  //   items: null,
+  //   fires: null,
+  //   rescueTime: 0.0,
+  //   rescued: false
+  // }
+  // state: {
+  //   map: 'drop1',
+  //   entrance: 'entrance_left',
+  //   equipped: 'flashlight',
+  //   items: null,
+  //   fires: null,
+  //   rescueTime: 0.0,
+  //   rescued: false
+  // }
   state: {
     map: 'island1',
     entrance: 'game_start',
     equipped: null,
     items: null,
-    fires: null
+    fires: null,
+    rescueTime: 0.0,
+    rescued: false
   }
 };
 
@@ -4831,8 +4851,15 @@ var _class = function (_Phaser$State) {
         boundsAlignH: "center",
         boundsAlignV: "middle"
       };
+
+      // tooltip that appears above items
       this.tooltip = this.add.text(this.player.x, this.player.y, '', style);
       this.tooltip.anchor.setTo(0.5, 0.5);
+
+      // message that appears in center of screen
+      this.message = this.add.text(0, 0, '', style);
+      this.message.anchor.setTo(0.5, 0.5);
+      this.messageTime = 0.0;
 
       this.emitterLayer = this.game.add.group();
 
@@ -4864,6 +4891,23 @@ var _class = function (_Phaser$State) {
         }
       }
       this.dark = !_config2.default.state.fires[_config2.default.state.map];
+
+      // create a weapon, only used if we have the flaregun
+      var w = game.add.weapon(1, 'diamond');
+      w.setBulletFrames(0, 80, true);
+      w.bulletKillType = _phaser2.default.Weapon.KILL_WORLD_BOUNDS;
+      w.bulletSpeed = 400;
+      w.fireRate = 50;
+      w.trackSprite(this.player, 0, 0, false);
+      w.bulletGravity.y = 250;
+      w.onFire.add(this.onFire, this);
+      w.onKill.add(this.onKill, this);
+      this.flaregun = w;
+      this.fireButton = this.input.keyboard.addKey(_phaser2.default.KeyCode.ENTER);
+      this.flareemitter = game.add.emitter(0, 0, 1000);
+      this.flareemitter.makeParticles('diamond');
+      this.flareemitter.gravity = 2;
+      this.emitterLayer.add(this.flareemitter);
 
       // spawn monsters
       if (this.dark) {
@@ -4983,14 +5027,19 @@ var _class = function (_Phaser$State) {
           _config2.default.state.entrance = props.entrance;
           this.state.start('Warp');
         } else {
-          this.tooltip.text = "it's too dark";
-          this.tooltip.x = this.camera.x + this.game.width / 2.0;
-          this.tooltip.y = this.camera.y + this.game.height / 2.0;
+          this.setMessageText("it's too dark");
         }
       } else {
-        this.tooltip.text = "undeveloped";
-        this.tooltip.x = this.camera.x + this.game.width / 2.0;
-        this.tooltip.y = this.camera.y + this.game.height / 2.0;
+        this.setMessageText("cannot fit");
+      }
+    }
+  }, {
+    key: 'setMessageText',
+    value: function setMessageText(text) {
+      if (text != this.message.text) {
+        this.message.text = text;
+        this.messageTime = 5.0;
+        this.message.visible = true;
       }
     }
   }, {
@@ -5022,14 +5071,42 @@ var _class = function (_Phaser$State) {
     value: function update() {
       var _this2 = this;
 
+      var dt = this.game.time.physicsElapsed;
+
+      // reduce the rescue time if set
+      if (_config2.default.state.rescueTime > 0.0) {
+        _config2.default.state.rescueTime -= dt;
+      } else {
+        _config2.default.state.rescueTime = 0.0;
+      }
+
+      // switch to the game over screen if we won
+      if (_config2.default.state.rescueTime == 0.0 && _config2.default.state.rescued) {
+        this.state.start("GameOver");
+      }
+
+      // emit from the flaregun's bullet if active
+      if (this.bullet) {
+        this.flareemitter.x = this.bullet.x;
+        this.flareemitter.y = this.bullet.y;
+        var vx = this.bullet.body.velocity.x;
+        var vy = this.bullet.body.velocity.y;
+        this.flareemitter.setXSpeed((vx - 20) / 10.0, (vx + 20) / 20.0);
+        this.flareemitter.setYSpeed((vy - 20) / 10.0, (vy + 20) / 20.0);
+      }
+
+      // set our message text to center of screen
+      this.updateMessage(dt);
+
+      // clear the tooltip and message texts
+      this.tooltip.text = '';
+
       this.bg.x = (this.camera.x - this.world.width / 2.0) * 0.5 + this.bg.width / 2.0;
       this.bg.y = (this.camera.y - this.world.height / 2.0) * 0.5 + this.bg.height / 2.0;
-      var dt = this.game.time.physicsElapsed;
       if (this.itemPickupCooldown > 0.0) this.itemPickupCooldown -= dt;
       this.pushPlatformPhysics(this.player);
       game.physics.arcade.collide([this.player, this.monsters, this.items], this.map.boundaries);
       this.popPlatformPhysics(this.player);
-      this.tooltip.text = '';
 
       this.player.underwater = false;
       for (var idx in this.map.water) {
@@ -5062,8 +5139,40 @@ var _class = function (_Phaser$State) {
       if (this.dropkey.isDown) {
         this.dropItem();
       }
+      if (this.fireButton.isDown) {
+        switch (_config2.default.state.equipped) {
+          case 'flaregun':
+            if (this.player.scale.x < 0.0) this.flaregun.fireAngle = -100;else this.flaregun.fireAngle = -80;
+            this.flaregun.fire();
+            if (_config2.default.state.rescueTime > 0.0) {
+              // && !this.map.properties.dark) {
+              _config2.default.state.rescued = true;
+              _config2.default.state.rescueTime = 15.0;
+              this.setMessageText("congrats!\nyou have been rescued");
+            }
+            //config.state.equipped = null;
+            //delete config.state.items['flaregun'];
+            break;
+          case 'radio':
+            this.setMessageText("Hello? Can you put\nup a signal flare?");
+            _config2.default.state.rescueTime = 30.0;
+            break;
+        }
+      }
       this.lightSprite.reset(game.camera.x - 50, game.camera.y - 50);
       this.updateShadowTexture();
+    }
+  }, {
+    key: 'updateMessage',
+    value: function updateMessage(dt) {
+      if (this.messageTime > 0.0) {
+        this.message.x = this.player.x;
+        this.message.y = this.player.y - 32;
+        this.messageTime -= dt;
+      } else {
+        this.message.text = '';
+        this.message.visible = false;
+      }
     }
   }, {
     key: 'updateShadowTexture',
@@ -5099,6 +5208,20 @@ var _class = function (_Phaser$State) {
       this.shadowTexture.context.fill();
 
       this.shadowTexture.dirty = true;
+    }
+  }, {
+    key: 'onFire',
+    value: function onFire(bullet, weapon) {
+      this.flareemitter.x = bullet.x;
+      this.flareemitter.y = bullet.y;
+      this.flareemitter.start(false, 10000, 10, 100);
+      this.bullet = bullet;
+    }
+  }, {
+    key: 'onKill',
+    value: function onKill(bullet) {
+      this.flareemitter.on = false;
+      this.bullet = null;
     }
   }]);
 

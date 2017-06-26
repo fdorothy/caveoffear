@@ -277,6 +277,18 @@ export default class extends Phaser.State {
   update() {
     var dt = this.game.time.physicsElapsed;
 
+    // reduce the rescue time if set
+    if (config.state.rescueTime > 0.0) {
+      config.state.rescueTime -= dt;
+    } else {
+      config.state.rescueTime = 0.0;
+    }
+
+    // switch to the game over screen if we won
+    if (config.state.rescueTime == 0.0 && config.state.rescued) {
+      this.state.start("GameOver");
+    }
+
     // emit from the flaregun's bullet if active
     if (this.bullet) {
       this.flareemitter.x = this.bullet.x;
@@ -330,14 +342,27 @@ export default class extends Phaser.State {
     if (this.dropkey.isDown) {
       this.dropItem();
     }
-    if (this.fireButton.isDown && config.state.equipped == 'flaregun') {
-      if (this.player.scale.x < 0.0)
-        this.flaregun.fireAngle = -100;
-      else
-        this.flaregun.fireAngle = -80;
-      this.flaregun.fire();
-      //config.state.equipped = null;
-      //delete config.state.items['flaregun'];
+    if (this.fireButton.isDown) {
+      switch (config.state.equipped) {
+      case 'flaregun':
+        if (this.player.scale.x < 0.0)
+          this.flaregun.fireAngle = -100;
+        else
+          this.flaregun.fireAngle = -80;
+        this.flaregun.fire();
+        if (config.state.rescueTime > 0.0) {// && !this.map.properties.dark) {
+          config.state.rescued = true;
+          config.state.rescueTime = 15.0;
+          this.setMessageText("congrats!\nyou have been rescued");
+        }
+        //config.state.equipped = null;
+        //delete config.state.items['flaregun'];
+        break;
+      case 'radio':
+        this.setMessageText("Hello? Can you put\nup a signal flare?");
+        config.state.rescueTime = 30.0;
+        break;
+      }
     }
     this.lightSprite.reset(game.camera.x-50, game.camera.y-50);
     this.updateShadowTexture();
