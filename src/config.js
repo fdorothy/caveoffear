@@ -53,7 +53,8 @@ export default {
   //   items: null,
   //   fires: null,
   //   rescueTime: 0.0,
-  //   rescued: false
+  //   rescued: false,
+  //   deadTime: 999
   // }
   // state: {
   //   map: 'drop1',
@@ -62,7 +63,8 @@ export default {
   //   items: null,
   //   fires: null,
   //   rescueTime: 0.0,
-  //   rescued: false
+  //   rescued: false,
+  //   deadTime: 999
   // }
   state: {
     map: 'island1',
@@ -71,6 +73,7 @@ export default {
     items: null,
     fires: null,
     rescueTime: 0.0,
-    rescued: false
+    rescued: false,
+    deadTime: 999
   }
 }

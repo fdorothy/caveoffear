@@ -60,6 +60,8 @@ export default class extends Phaser.State {
     this.shadowTexture = this.game.add.bitmapData(this.game.width+100, this.game.height+100);
     this.lightSprite = this.game.add.image(this.game.camera.x-50, this.game.camera.y-50, this.shadowTexture);
     this.lightSprite.blendMode = Phaser.blendModes.MULTIPLY;
+
+    // tooltip that appears above items
     var style = {
       font: 'bold 16px Belgrano',
       fill: '#000',
@@ -69,7 +71,6 @@ export default class extends Phaser.State {
       boundsAlignV: "middle",
     };
 
-    // tooltip that appears above items
     this.tooltip = this.add.text(this.player.x, this.player.y, '', style);
     this.tooltip.anchor.setTo(0.5, 0.5);
 
@@ -146,6 +147,21 @@ export default class extends Phaser.State {
 	}
       }
     }
+
+    // show how long we have to solve the game
+    this.hud = this.game.add.group();
+    this.hud.fixedToCamera = true;
+    
+    var style = {
+      font: 'bold 16px Belgrano',
+      fill: '#900',
+      align: 'center',
+      boundsAlignH: "center",
+      boundsAlignV: "middle",
+    };
+    this.deadTime = new Phaser.Text(this.game, this.camera.width / 2, 0, config.state.deadTime, style);
+    this.hud.add(this.deadTime);
+    this.deadTime.anchor.setTo(0.5, 0);
   }
 
   spawnItem(name, x, y) {
@@ -285,6 +301,15 @@ export default class extends Phaser.State {
       config.state.rescueTime -= dt;
     } else {
       config.state.rescueTime = 0.0;
+    }
+
+    // reduce and check dead time
+    if (config.state.deadTime <= 0.0) {
+      this.state.start("GameOver");
+    } else {
+      config.state.deadTime -= dt;
+      var t = config.state.deadTime.toFixed(0)
+      this.deadTime.text = t;
     }
 
     // switch to the game over screen if we won

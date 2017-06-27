@@ -502,7 +502,8 @@ exports.default = {
   //   items: null,
   //   fires: null,
   //   rescueTime: 0.0,
-  //   rescued: false
+  //   rescued: false,
+  //   deadTime: 999
   // }
   // state: {
   //   map: 'drop1',
@@ -511,7 +512,8 @@ exports.default = {
   //   items: null,
   //   fires: null,
   //   rescueTime: 0.0,
-  //   rescued: false
+  //   rescued: false,
+  //   deadTime: 999
   // }
   state: {
     map: 'island1',
@@ -520,7 +522,8 @@ exports.default = {
     items: null,
     fires: null,
     rescueTime: 0.0,
-    rescued: false
+    rescued: false,
+    deadTime: 999
   }
 };
 
@@ -4851,6 +4854,8 @@ var _class = function (_Phaser$State) {
       this.shadowTexture = this.game.add.bitmapData(this.game.width + 100, this.game.height + 100);
       this.lightSprite = this.game.add.image(this.game.camera.x - 50, this.game.camera.y - 50, this.shadowTexture);
       this.lightSprite.blendMode = _phaser2.default.blendModes.MULTIPLY;
+
+      // tooltip that appears above items
       var style = {
         font: 'bold 16px Belgrano',
         fill: '#000',
@@ -4860,7 +4865,6 @@ var _class = function (_Phaser$State) {
         boundsAlignV: "middle"
       };
 
-      // tooltip that appears above items
       this.tooltip = this.add.text(this.player.x, this.player.y, '', style);
       this.tooltip.anchor.setTo(0.5, 0.5);
 
@@ -4934,6 +4938,21 @@ var _class = function (_Phaser$State) {
           }
         }
       }
+
+      // show how long we have to solve the game
+      this.hud = this.game.add.group();
+      this.hud.fixedToCamera = true;
+
+      var style = {
+        font: 'bold 16px Belgrano',
+        fill: '#900',
+        align: 'center',
+        boundsAlignH: "center",
+        boundsAlignV: "middle"
+      };
+      this.deadTime = new _phaser2.default.Text(this.game, this.camera.width / 2, 0, _config2.default.state.deadTime, style);
+      this.hud.add(this.deadTime);
+      this.deadTime.anchor.setTo(0.5, 0);
     }
   }, {
     key: 'spawnItem',
@@ -5086,6 +5105,15 @@ var _class = function (_Phaser$State) {
         _config2.default.state.rescueTime -= dt;
       } else {
         _config2.default.state.rescueTime = 0.0;
+      }
+
+      // reduce and check dead time
+      if (_config2.default.state.deadTime <= 0.0) {
+        this.state.start("GameOver");
+      } else {
+        _config2.default.state.deadTime -= dt;
+        var t = _config2.default.state.deadTime.toFixed(0);
+        this.deadTime.text = t;
       }
 
       // switch to the game over screen if we won
