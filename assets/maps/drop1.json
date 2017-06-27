@@ -51,7 +51,6 @@
         }, 
         {
          "draworder":"topdown",
-         "height":0,
          "name":"entrances",
          "objects":[
                 {
@@ -101,13 +100,11 @@
          "opacity":1,
          "type":"objectgroup",
          "visible":true,
-         "width":0,
          "x":0,
          "y":0
         }, 
         {
          "draworder":"topdown",
-         "height":0,
          "name":"exits",
          "objects":[
                 {
@@ -135,6 +132,16 @@
                  "height":56,
                  "id":8,
                  "name":"exit_left",
+                 "properties":
+                    {
+                     "entrance":"entrance_right",
+                     "map":"passage2"
+                    },
+                 "propertytypes":
+                    {
+                     "entrance":"string",
+                     "map":"string"
+                    },
                  "rotation":0,
                  "type":"exit",
                  "visible":true,
@@ -177,13 +184,11 @@
          "opacity":1,
          "type":"objectgroup",
          "visible":true,
-         "width":0,
          "x":0,
          "y":0
         }, 
         {
          "draworder":"topdown",
-         "height":0,
          "name":"items",
          "objects":[
                 {
@@ -200,7 +205,6 @@
          "opacity":1,
          "type":"objectgroup",
          "visible":true,
-         "width":0,
          "x":0,
          "y":0
         }],
@@ -219,6 +223,7 @@
      "spriteLayer":"string"
     },
  "renderorder":"right-down",
+ "tiledversion":"1.0.1",
  "tileheight":32,
  "tilesets":[
         {
@@ -235,6 +240,7 @@
          "tilewidth":32
         }],
  "tilewidth":32,
+ "type":"map",
  "version":1,
  "width":18
 }

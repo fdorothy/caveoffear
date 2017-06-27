@@ -470,7 +470,8 @@ exports.default = {
     island1: 'assets/maps/island1.json',
     hallway: 'assets/maps/hallway.json',
     drop1: 'assets/maps/drop1.json',
-    passage1: 'assets/maps/passage1.json'
+    passage1: 'assets/maps/passage1.json',
+    passage2: 'assets/maps/passage2.json'
   },
   monsters: {
     'mummy': {
