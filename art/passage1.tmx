@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.0" tiledversion="1.0.1" orientation="orthogonal" renderorder="left-down" width="50" height="24" tilewidth="32" tileheight="32" nextobjectid="15">
+<map version="1.0" tiledversion="1.0.1" orientation="orthogonal" renderorder="left-down" width="50" height="24" tilewidth="32" tileheight="32" nextobjectid="16">
  <properties>
   <property name="dark" type="bool" value="true"/>
   <property name="name" value="passage1"/>
@@ -187,9 +187,10 @@
   </object>
   <object id="14" name="exit_right" type="exit" x="1571" y="263.333" width="28.6667" height="86.6667">
    <properties>
-    <property name="entrance" value="entrance_right"/>
+    <property name="entrance" value="entrance_left"/>
     <property name="map" value="drop2"/>
    </properties>
   </object>
+  <object id="15" name="flaregun" type="item_spawn" x="1359.64" y="573.66" width="29" height="30"/>
  </objectgroup>
 </map>

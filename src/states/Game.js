@@ -40,6 +40,7 @@ export default class extends Phaser.State {
       y: entranceXY[1],
       asset: 'hero'
     })
+    this.player.body.setSize(this.player.body.width * 0.75, this.player.body.height, 0, 0);
     this.map.spriteLayer.add(this.player);
     this.game.camera.follow(this.player);
 

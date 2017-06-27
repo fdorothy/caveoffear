@@ -4356,6 +4356,8 @@ var _class = function (_Phaser$Sprite) {
     _this.scale.setTo(_this.info.scale);
     _this.direction = 1;
     _this.animations.add('run');
+    var h = _this.body.height * 0.6;
+    _this.body.setSize(_this.body.width * 0.8, h, 0, _this.body.height - h);
     return _this;
   }
 
@@ -4834,6 +4836,7 @@ var _class = function (_Phaser$State) {
         y: entranceXY[1],
         asset: 'hero'
       });
+      this.player.body.setSize(this.player.body.width * 0.75, this.player.body.height, 0, 0);
       this.map.spriteLayer.add(this.player);
       this.game.camera.follow(this.player);
 

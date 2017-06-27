@@ -14,6 +14,8 @@ export default class extends Phaser.Sprite {
     this.scale.setTo(this.info.scale);
     this.direction = 1;
     this.animations.add('run');
+    var h = this.body.height * 0.6;
+    this.body.setSize(this.body.width * 0.8, h, 0, this.body.height - h);
   }
 
   update () {

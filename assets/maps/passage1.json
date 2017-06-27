@@ -249,7 +249,7 @@
                  "name":"exit_right",
                  "properties":
                     {
-                     "entrance":"entrance_right",
+                     "entrance":"entrance_left",
                      "map":"drop2"
                     },
                  "propertytypes":
@@ -263,6 +263,17 @@
                  "width":28.6667,
                  "x":1571,
                  "y":263.333
+                }, 
+                {
+                 "height":30,
+                 "id":15,
+                 "name":"flaregun",
+                 "rotation":0,
+                 "type":"item_spawn",
+                 "visible":true,
+                 "width":29,
+                 "x":1359.64228963525,
+                 "y":573.660166124955
                 }],
          "opacity":1,
          "type":"objectgroup",
@@ -270,7 +281,7 @@
          "x":0,
          "y":0
         }],
- "nextobjectid":15,
+ "nextobjectid":16,
  "orientation":"orthogonal",
  "properties":
     {
