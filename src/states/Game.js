@@ -27,10 +27,12 @@ export default class extends Phaser.State {
     });
 
     // background if needed
-    this.bg = new Phaser.TileSprite(this.game, 0, 0, this.game.world.width, this.game.world.height, 'starfield');
-    this.bg.tilePosition.y += 2;
-    this.bg.anchor.setTo(0.5, 0.5);
-    this.backgroundLayer.add(this.bg);
+    if (this.map.properties && this.map.properties.background) {
+      this.bg = new Phaser.TileSprite(this.game, 0, 0, this.game.world.width * 3 / 2, this.game.world.height * 3 / 2, this.map.properties.background);
+      this.bg.tilePosition.y += 2;
+      this.bg.anchor.setTo(0.5, 0.5);
+      this.backgroundLayer.add(this.bg);
+    }
 
     // create and add player
     var entranceXY = this.getEntranceXY(config.state.entrance);

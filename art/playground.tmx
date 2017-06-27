@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <map version="1.0" tiledversion="1.0.1" orientation="orthogonal" renderorder="right-down" width="20" height="20" tilewidth="32" tileheight="32" nextobjectid="11">
  <properties>
+  <property name="background" value="starfield"/>
   <property name="dark" type="bool" value="true"/>
   <property name="name" value="playground"/>
   <property name="spriteLayer" value="bounds"/>

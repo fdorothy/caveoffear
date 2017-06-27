@@ -492,7 +492,8 @@ exports.default = {
     island1: 'assets/images/tiles2.png',
     cavetiles: 'assets/images/cavetiles.png',
     diamond: 'assets/images/diamond.png',
-    starfield: 'assets/images/starfield.png'
+    starfield: 'assets/images/starfield.png',
+    rock: 'assets/images/rock.png'
   },
   // state: {
   //   map: 'playground',
@@ -4823,10 +4824,12 @@ var _class = function (_Phaser$State) {
       });
 
       // background if needed
-      this.bg = new _phaser2.default.TileSprite(this.game, 0, 0, this.game.world.width, this.game.world.height, 'starfield');
-      this.bg.tilePosition.y += 2;
-      this.bg.anchor.setTo(0.5, 0.5);
-      this.backgroundLayer.add(this.bg);
+      if (this.map.properties && this.map.properties.background) {
+        this.bg = new _phaser2.default.TileSprite(this.game, 0, 0, this.game.world.width * 3 / 2, this.game.world.height * 3 / 2, this.map.properties.background);
+        this.bg.tilePosition.y += 2;
+        this.bg.anchor.setTo(0.5, 0.5);
+        this.backgroundLayer.add(this.bg);
+      }
 
       // create and add player
       var entranceXY = this.getEntranceXY(_config2.default.state.entrance);

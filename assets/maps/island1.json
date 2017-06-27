@@ -272,6 +272,7 @@
  "orientation":"orthogonal",
  "properties":
     {
+     "background":"starfield",
      "dark":false,
      "name":"island",
      "platforms":true,
@@ -279,6 +280,7 @@
     },
  "propertytypes":
     {
+     "background":"string",
      "dark":"bool",
      "name":"string",
      "platforms":"bool",

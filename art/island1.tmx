@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <map version="1.0" tiledversion="1.0.1" orientation="orthogonal" renderorder="right-down" width="200" height="30" tilewidth="32" tileheight="32" nextobjectid="23">
  <properties>
+  <property name="background" value="starfield"/>
   <property name="dark" type="bool" value="false"/>
   <property name="name" value="island"/>
   <property name="platforms" type="bool" value="true"/>

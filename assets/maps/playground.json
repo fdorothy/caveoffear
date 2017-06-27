@@ -213,12 +213,14 @@
  "orientation":"orthogonal",
  "properties":
     {
+     "background":"starfield",
      "dark":true,
      "name":"playground",
      "spriteLayer":"bounds"
     },
  "propertytypes":
     {
+     "background":"string",
      "dark":"bool",
      "name":"string",
      "spriteLayer":"string"

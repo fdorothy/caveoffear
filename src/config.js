@@ -44,6 +44,7 @@ export default {
     cavetiles: 'assets/images/cavetiles.png',
     diamond: 'assets/images/diamond.png',
     starfield: 'assets/images/starfield.png',
+    rock: 'assets/images/rock.png'
   },
   // state: {
   //   map: 'playground',
