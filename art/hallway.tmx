@@ -3,6 +3,7 @@
  <properties>
   <property name="background" value="rock"/>
   <property name="dark" type="bool" value="true"/>
+  <property name="music" value="cave_audio"/>
   <property name="name" value="hallway"/>
   <property name="spriteLayer" value="bounds"/>
  </properties>

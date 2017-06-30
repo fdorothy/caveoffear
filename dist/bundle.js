@@ -484,6 +484,10 @@ exports.default = {
       acceleration: 200
     }
   },
+  sounds: {
+    wave_audio: 'assets/sounds/waves.ogg',
+    cave_audio: 'assets/sounds/cave.ogg'
+  },
   images: {
     flashlight: 'assets/images/flashlight.png',
     flaregun: 'assets/images/flaregun.png',
@@ -4953,6 +4957,20 @@ var _class = function (_Phaser$State) {
       this.deadTime = new _phaser2.default.Text(this.game, this.camera.width / 2, 0, _config2.default.state.deadTime, style);
       this.hud.add(this.deadTime);
       this.deadTime.anchor.setTo(0.5, 0);
+
+      // music!
+      var new_music = null;
+      if (this.map.properties && this.map.properties.music) {
+        new_music = this.map.properties.music;
+      }
+      if (game.music_key != new_music) {
+        if (game.music) game.music.fadeOut(1000);
+        if (new_music) {
+          game.music = this.game.add.audio(new_music);
+          game.music.fadeIn(2000, true);
+        }
+      }
+      game.music_key = new_music;
     }
   }, {
     key: 'spawnItem',
@@ -5410,6 +5428,10 @@ var _class = function (_Phaser$State) {
 
       for (var key in _config2.default.images) {
         this.load.image(key, _config2.default.images[key]);
+      }
+
+      for (var key in _config2.default.sounds) {
+        this.load.audio(key, _config2.default.sounds[key]);
       }
 
       this.load.spritesheet('ms', 'assets/images/metalslug_mummy37x45.png', 37, 45, 18);

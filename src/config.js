@@ -35,6 +35,10 @@ export default {
       acceleration: 200,
     }
   },
+  sounds: {
+    wave_audio: 'assets/sounds/waves.ogg',
+    cave_audio: 'assets/sounds/cave.ogg'
+  },
   images: {
     flashlight: 'assets/images/flashlight.png',
     flaregun: 'assets/images/flaregun.png',

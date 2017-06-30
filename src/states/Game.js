@@ -162,6 +162,21 @@ export default class extends Phaser.State {
     this.deadTime = new Phaser.Text(this.game, this.camera.width / 2, 0, config.state.deadTime, style);
     this.hud.add(this.deadTime);
     this.deadTime.anchor.setTo(0.5, 0);
+
+    // music!
+    var new_music = null;
+    if (this.map.properties && this.map.properties.music) {
+      new_music = this.map.properties.music;
+    }
+    if (game.music_key != new_music) {
+      if (game.music)
+        game.music.fadeOut(1000);
+      if (new_music) {
+        game.music = this.game.add.audio(new_music);
+        game.music.fadeIn(2000, true);
+      }
+    }
+    game.music_key = new_music;
   }
 
   spawnItem(name, x, y) {

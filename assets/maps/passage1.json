@@ -276,6 +276,7 @@
     {
      "background":"rock",
      "dark":true,
+     "music":"cave_audio",
      "name":"passage1",
      "spriteLayer":"bounds"
     },
@@ -283,6 +284,7 @@
     {
      "background":"string",
      "dark":"bool",
+     "music":"string",
      "name":"string",
      "spriteLayer":"string"
     },

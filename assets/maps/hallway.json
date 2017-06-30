@@ -379,6 +379,7 @@
     {
      "background":"rock",
      "dark":true,
+     "music":"cave_audio",
      "name":"hallway",
      "spriteLayer":"bounds"
     },
@@ -386,6 +387,7 @@
     {
      "background":"string",
      "dark":"bool",
+     "music":"string",
      "name":"string",
      "spriteLayer":"string"
     },
