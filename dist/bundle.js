@@ -494,7 +494,8 @@ exports.default = {
     win_audio: 'assets/sounds/win.wav',
     pickup_audio: 'assets/sounds/pickup.mp3',
     fire_audio: 'assets/sounds/fire.wav',
-    noise_audio: 'assets/sounds/noise.wav'
+    noise_audio: 'assets/sounds/noise.wav',
+    splash_audio: 'assets/sounds/splash.wav'
   },
   images: {
     flashlight: 'assets/images/flashlight.png',
@@ -4560,6 +4561,11 @@ var _class = function (_Phaser$Sprite) {
         this.jumping = false;
         this.jumps = 0.0;
       }
+      if (this.falling && this.body.blocked.down) {
+        this.sfx.jump.play(null, .1, 0.5, false, false);
+        this.falling = false;
+      }
+      if (this.body.blocked.down == false && this.body.velocity.y > 100.0) this.falling = true;
     }
   }, {
     key: 'moveLeft',
@@ -4595,6 +4601,7 @@ var _class = function (_Phaser$Sprite) {
     key: 'startJump',
     value: function startJump() {
       if ((this.body.blocked.down || this.underwater) && this.jumping == false) {
+        if (!this.underwater) this.sfx.jump.play(null, .1, 0.5, false, false);
         this.jumps = _config2.default.player.jumpBurst;
         this.body.velocity.y = -_config2.default.player.jumpBurst;
         this.jumping = true;
@@ -4975,7 +4982,8 @@ var _class = function (_Phaser$State) {
         if (game.music) game.music.fadeOut(1000);
         if (new_music) {
           game.music = this.game.add.audio(new_music);
-          game.music.fadeIn(2000, true);
+          //game.music.fadeIn(2000, true);
+          game.music.volume = 0.65;
         }
       }
       game.music_key = new_music;
@@ -4989,8 +4997,10 @@ var _class = function (_Phaser$State) {
         monster2: this.game.add.audio('monster2_audio'),
         pickup: this.game.add.audio('pickup_audio'),
         fire: this.game.add.audio('fire_audio'),
-        noise: this.game.add.audio('noise_audio')
+        noise: this.game.add.audio('noise_audio'),
+        splash: this.game.add.audio('splash_audio')
       };
+      this.player.sfx = this.sfx;
     }
   }, {
     key: 'spawnItem',
@@ -5184,6 +5194,7 @@ var _class = function (_Phaser$State) {
       game.physics.arcade.collide([this.player, this.monsters, this.items], this.map.boundaries);
       this.popPlatformPhysics(this.player);
 
+      var inwater = this.player.underwater;
       this.player.underwater = false;
       for (var idx in this.map.water) {
         var layer = this.map.water[idx];
@@ -5191,6 +5202,9 @@ var _class = function (_Phaser$State) {
         this.player.underwater = tiles.filter(function (x) {
           return x.index != -1;
         }).length > 0;
+      }
+      if (inwater != this.player.underwater && this.player.body.velocity.y > 100.0) {
+        this.sfx.splash.play();
       }
 
       game.physics.arcade.overlap(this.player, this.items, this.trigger, null, this);
@@ -5209,7 +5223,6 @@ var _class = function (_Phaser$State) {
       }
       if (this.cursor.up.downDuration(250)) {
         this.player.startJump();
-        this.sfx.jump.play(null, .1, 0.5, false, false);
       }
       if (this.cursor.up.isDown) {
         this.player.continueJump();

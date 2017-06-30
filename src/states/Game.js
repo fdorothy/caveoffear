@@ -173,7 +173,8 @@ export default class extends Phaser.State {
         game.music.fadeOut(1000);
       if (new_music) {
         game.music = this.game.add.audio(new_music);
-        game.music.fadeIn(2000, true);
+        //game.music.fadeIn(2000, true);
+        game.music.volume = 0.65;
       }
     }
     game.music_key = new_music;
@@ -187,8 +188,10 @@ export default class extends Phaser.State {
       monster2: this.game.add.audio('monster2_audio'),
       pickup: this.game.add.audio('pickup_audio'),
       fire: this.game.add.audio('fire_audio'),
-      noise: this.game.add.audio('noise_audio')
+      noise: this.game.add.audio('noise_audio'),
+      splash: this.game.add.audio('splash_audio')
     }
+    this.player.sfx = this.sfx;
   }
 
   spawnItem(name, x, y) {
@@ -370,11 +373,15 @@ export default class extends Phaser.State {
     game.physics.arcade.collide([this.player, this.monsters, this.items], this.map.boundaries);
     this.popPlatformPhysics(this.player);
 
+    var inwater = this.player.underwater;
     this.player.underwater = false;
     for (var idx in this.map.water) {
       var layer = this.map.water[idx];
       var tiles = layer.getTiles(this.player.x - 16, this.player.y - 16 - this.player.height / 2.0, 32, 32);
       this.player.underwater = tiles.filter((x) => x.index != -1).length > 0;
+    }
+    if (inwater != this.player.underwater && this.player.body.velocity.y > 100.0) {
+      this.sfx.splash.play();
     }
 
     game.physics.arcade.overlap(this.player, this.items, this.trigger, null, this);
@@ -395,7 +402,6 @@ export default class extends Phaser.State {
     }
     if (this.cursor.up.downDuration(250)) {
       this.player.startJump();
-      this.sfx.jump.play(null, .1, 0.5, false, false);
     }
     if (this.cursor.up.isDown) {
       this.player.continueJump();

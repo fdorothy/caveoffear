@@ -45,7 +45,8 @@ export default {
     win_audio: 'assets/sounds/win.wav',
     pickup_audio: 'assets/sounds/pickup.mp3',
     fire_audio: 'assets/sounds/fire.wav',
-    noise_audio: 'assets/sounds/noise.wav'
+    noise_audio: 'assets/sounds/noise.wav',
+    splash_audio: 'assets/sounds/splash.wav'
   },
   images: {
     flashlight: 'assets/images/flashlight.png',

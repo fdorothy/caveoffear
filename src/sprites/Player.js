@@ -62,6 +62,12 @@ export default class extends Phaser.Sprite {
       this.jumping = false;
       this.jumps = 0.0;
     }
+    if (this.falling && this.body.blocked.down) {
+      this.sfx.jump.play(null, .1, 0.5, false, false);
+      this.falling = false;
+    }
+    if (this.body.blocked.down == false && this.body.velocity.y > 100.0)
+      this.falling = true;
   }
 
   moveLeft() {
@@ -96,6 +102,8 @@ export default class extends Phaser.Sprite {
 
   startJump() {
     if ((this.body.blocked.down || this.underwater) && this.jumping == false) {
+      if (!this.underwater)
+        this.sfx.jump.play(null, .1, 0.5, false, false);
       this.jumps = config.player.jumpBurst;
       this.body.velocity.y = -config.player.jumpBurst;
       this.jumping = true;
