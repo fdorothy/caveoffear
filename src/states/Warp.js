@@ -9,7 +9,7 @@ export default class extends Phaser.State {
   }
 
   create () {
-    var txt = config.state.map;
+    var txt = config.levels[config.state.map].desc;
     this.text = this.add.text(
       this.game.width/2.0, this.game.height/2.0,
       txt, { font: '24px Belgrano', fill: '#aa0000', align: 'center' })

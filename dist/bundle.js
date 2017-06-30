@@ -466,13 +466,13 @@ exports.default = {
     groundDeaccel: 500
   },
   levels: {
-    playground: 'assets/maps/playground.json',
-    island1: 'assets/maps/island1.json',
-    hallway: 'assets/maps/hallway.json',
-    drop1: 'assets/maps/drop1.json',
-    drop2: 'assets/maps/drop2.json',
-    passage1: 'assets/maps/passage1.json',
-    passage2: 'assets/maps/passage2.json'
+    playground: { asset: 'assets/maps/playground.json', desc: 'playground' },
+    island1: { asset: 'assets/maps/island1.json', desc: 'island' },
+    hallway: { asset: 'assets/maps/hallway.json', desc: 'large cavern' },
+    drop1: { asset: 'assets/maps/drop1.json', desc: 'flooded passage' },
+    drop2: { asset: 'assets/maps/drop2.json', desc: 'flooded passage' },
+    passage1: { asset: 'assets/maps/passage1.json', desc: 'flooded cavern' },
+    passage2: { asset: 'assets/maps/passage2.json', desc: 'flooded cavern' }
   },
   monsters: {
     'mummy': {
@@ -5467,7 +5467,7 @@ var _class = function (_Phaser$State) {
 
       // load all tilemaps and tilesheets
       );for (var key in _config2.default.levels) {
-        this.load.tilemap(key, _config2.default.levels[key], null, _phaser2.default.Tilemap.TILED_JSON);
+        this.load.tilemap(key, _config2.default.levels[key].asset, null, _phaser2.default.Tilemap.TILED_JSON);
       }
 
       for (var key in _config2.default.images) {
@@ -5550,7 +5550,7 @@ var _class = function (_Phaser$State) {
   }, {
     key: 'create',
     value: function create() {
-      var txt = _config2.default.state.map;
+      var txt = _config2.default.levels[_config2.default.state.map].desc;
       this.text = this.add.text(this.game.width / 2.0, this.game.height / 2.0, txt, { font: '24px Belgrano', fill: '#aa0000', align: 'center' });
       this.text.alpha = 0.0;
       this.game.add.tween(this.text).to({ alpha: 1 }, 1000, "Linear", true);
