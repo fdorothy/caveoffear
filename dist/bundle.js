@@ -4982,8 +4982,7 @@ var _class = function (_Phaser$State) {
         if (game.music) game.music.fadeOut(1000);
         if (new_music) {
           game.music = this.game.add.audio(new_music);
-          //game.music.fadeIn(2000, true);
-          game.music.volume = 0.65;
+          game.music.fadeIn(2000, true);
         }
       }
       game.music_key = new_music;
