@@ -33,6 +33,10 @@ export default class extends Phaser.State {
   }
 
   create () {
-    this.state.start('Game')
+  }
+
+  update() {
+    if (this.cache.isSoundDecoded)
+      this.state.start('Game')
   }
 }

@@ -164,19 +164,27 @@ export default class extends Phaser.State {
     this.deadTime.anchor.setTo(0.5, 0);
 
     // music!
-    var new_music = null;
+    if (game.music == null) {
+      game.music = {};
+    }
+    var music = null;
     if (this.map.properties && this.map.properties.music) {
-      new_music = this.map.properties.music;
+      music = this.map.properties.music;
     }
-    if (game.music_key != new_music) {
-      if (game.music)
-        game.music.fadeOut(1000);
-      if (new_music) {
-        game.music = this.game.add.audio(new_music);
-        game.music.fadeIn(2000, true);
-      }
+    if (game.music[music] == null) {
+      console.log('loading ' + music);
+      game.music[music] = this.game.add.audio(music);
+      game.music[music].play('', 0, 0.0, true);
     }
-    game.music_key = new_music;
+    // fade out all other music
+    for (var key in game.music) {
+      if (key != music)
+        game.music[key].stop();
+    }
+    if (music) {
+      game.music[music].play('', 0, 1.0, true);
+      console.log('playing ' + music);
+    }
 
     // sound effects
     this.sfx = {

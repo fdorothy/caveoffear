@@ -274,6 +274,7 @@
     {
      "background":"starfield",
      "dark":false,
+     "music":"melody_audio",
      "name":"island",
      "platforms":true,
      "spriteLayer":"bounds"
@@ -282,6 +283,7 @@
     {
      "background":"string",
      "dark":"bool",
+     "music":"string",
      "name":"string",
      "platforms":"bool",
      "spriteLayer":"string"

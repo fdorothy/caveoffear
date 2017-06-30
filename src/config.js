@@ -46,7 +46,8 @@ export default {
     pickup_audio: 'assets/sounds/pickup.mp3',
     fire_audio: 'assets/sounds/fire.wav',
     noise_audio: 'assets/sounds/noise.wav',
-    splash_audio: 'assets/sounds/splash.wav'
+    splash_audio: 'assets/sounds/splash.wav',
+    melody_audio: 'assets/sounds/melody.mp3'
   },
   images: {
     flashlight: 'assets/images/flashlight.png',

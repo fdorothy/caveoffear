@@ -3,6 +3,7 @@
  <properties>
   <property name="background" value="starfield"/>
   <property name="dark" type="bool" value="false"/>
+  <property name="music" value="melody_audio"/>
   <property name="name" value="island"/>
   <property name="platforms" type="bool" value="true"/>
   <property name="spriteLayer" value="bounds"/>
