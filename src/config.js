@@ -37,7 +37,15 @@ export default {
   },
   sounds: {
     wave_audio: 'assets/sounds/waves.ogg',
-    cave_audio: 'assets/sounds/cave.ogg'
+    cave_audio: 'assets/sounds/cave.ogg',
+    jump_audio: 'assets/sounds/jump.mp3',
+    monster1_audio: 'assets/sounds/monster1.mp3',
+    monster2_audio: 'assets/sounds/monster2.mp3',
+    death_audio: 'assets/sounds/death.mp3',
+    win_audio: 'assets/sounds/win.wav',
+    pickup_audio: 'assets/sounds/pickup.mp3',
+    fire_audio: 'assets/sounds/fire.wav',
+    noise_audio: 'assets/sounds/noise.wav'
   },
   images: {
     flashlight: 'assets/images/flashlight.png',

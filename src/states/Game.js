@@ -177,6 +177,18 @@ export default class extends Phaser.State {
       }
     }
     game.music_key = new_music;
+
+    // sound effects
+    this.sfx = {
+      win: this.game.add.audio('win_audio'),
+      jump: this.game.add.audio('jump_audio'),
+      death: this.game.add.audio('death_audio'),
+      monster1: this.game.add.audio('monster1_audio'),
+      monster2: this.game.add.audio('monster2_audio'),
+      pickup: this.game.add.audio('pickup_audio'),
+      fire: this.game.add.audio('fire_audio'),
+      noise: this.game.add.audio('noise_audio')
+    }
   }
 
   spawnItem(name, x, y) {
@@ -203,6 +215,7 @@ export default class extends Phaser.State {
 
   pickupItem(sprite) {
     if (this.itemPickupCooldown <= 0.0) {
+      this.sfx.pickup.play();
       this.dropItem();
       config.state.equipped = sprite.props.name;
       sprite.destroy();
@@ -250,6 +263,7 @@ export default class extends Phaser.State {
     } else if (y.props.type == "fire") {
       if (this.spacebar.isDown) {
 	this.ignite();
+        this.sfx.fire.play();
       }
     }
 
@@ -365,7 +379,10 @@ export default class extends Phaser.State {
 
     game.physics.arcade.overlap(this.player, this.items, this.trigger, null, this);
     game.physics.arcade.overlap(this.player, this.map.triggers, this.trigger, null, this);
-    game.physics.arcade.overlap(this.player, this.monsters, (x, y) => {this.state.start("GameOver");}, null, this);
+    game.physics.arcade.overlap(this.player, this.monsters, (x, y) => {
+      this.sfx.death.play();
+      this.state.start("GameOver");
+    }, null, this);
     var blocked = this.player.body.blocked.down;
     if (this.cursor.left.isDown) {
       this.player.moveLeft();
@@ -378,12 +395,14 @@ export default class extends Phaser.State {
     }
     if (this.cursor.up.downDuration(250)) {
       this.player.startJump();
+      this.sfx.jump.play(null, .1, 0.5, false, false);
     }
     if (this.cursor.up.isDown) {
       this.player.continueJump();
     }
     if (this.dropkey.isDown) {
       this.dropItem();
+      this.sfx.pickup.play();
     }
     if (this.fireButton.isDown) {
       switch (config.state.equipped) {
@@ -397,13 +416,17 @@ export default class extends Phaser.State {
           config.state.rescued = true;
           config.state.rescueTime = 15.0;
           this.setMessageText("congrats!\nyou have been rescued");
+          this.sfx.win.play();
         }
         //config.state.equipped = null;
         //delete config.state.items['flaregun'];
         break;
       case 'radio':
         this.setMessageText("Hello? Can you put\nup a signal flare?");
-        config.state.rescueTime = 30.0;
+        if (config.state.rescueTime <= 0.0) {
+          config.state.rescueTime = 30.0;
+          this.sfx.noise.play();
+        }
         break;
       }
     }

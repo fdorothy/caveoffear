@@ -486,7 +486,15 @@ exports.default = {
   },
   sounds: {
     wave_audio: 'assets/sounds/waves.ogg',
-    cave_audio: 'assets/sounds/cave.ogg'
+    cave_audio: 'assets/sounds/cave.ogg',
+    jump_audio: 'assets/sounds/jump.mp3',
+    monster1_audio: 'assets/sounds/monster1.mp3',
+    monster2_audio: 'assets/sounds/monster2.mp3',
+    death_audio: 'assets/sounds/death.mp3',
+    win_audio: 'assets/sounds/win.wav',
+    pickup_audio: 'assets/sounds/pickup.mp3',
+    fire_audio: 'assets/sounds/fire.wav',
+    noise_audio: 'assets/sounds/noise.wav'
   },
   images: {
     flashlight: 'assets/images/flashlight.png',
@@ -4971,6 +4979,18 @@ var _class = function (_Phaser$State) {
         }
       }
       game.music_key = new_music;
+
+      // sound effects
+      this.sfx = {
+        win: this.game.add.audio('win_audio'),
+        jump: this.game.add.audio('jump_audio'),
+        death: this.game.add.audio('death_audio'),
+        monster1: this.game.add.audio('monster1_audio'),
+        monster2: this.game.add.audio('monster2_audio'),
+        pickup: this.game.add.audio('pickup_audio'),
+        fire: this.game.add.audio('fire_audio'),
+        noise: this.game.add.audio('noise_audio')
+      };
     }
   }, {
     key: 'spawnItem',
@@ -5000,6 +5020,7 @@ var _class = function (_Phaser$State) {
     key: 'pickupItem',
     value: function pickupItem(sprite) {
       if (this.itemPickupCooldown <= 0.0) {
+        this.sfx.pickup.play();
         this.dropItem();
         _config2.default.state.equipped = sprite.props.name;
         sprite.destroy();
@@ -5050,6 +5071,7 @@ var _class = function (_Phaser$State) {
       } else if (y.props.type == "fire") {
         if (this.spacebar.isDown) {
           this.ignite();
+          this.sfx.fire.play();
         }
       }
 
@@ -5174,6 +5196,7 @@ var _class = function (_Phaser$State) {
       game.physics.arcade.overlap(this.player, this.items, this.trigger, null, this);
       game.physics.arcade.overlap(this.player, this.map.triggers, this.trigger, null, this);
       game.physics.arcade.overlap(this.player, this.monsters, function (x, y) {
+        _this2.sfx.death.play();
         _this2.state.start("GameOver");
       }, null, this);
       var blocked = this.player.body.blocked.down;
@@ -5186,12 +5209,14 @@ var _class = function (_Phaser$State) {
       }
       if (this.cursor.up.downDuration(250)) {
         this.player.startJump();
+        this.sfx.jump.play(null, .1, 0.5, false, false);
       }
       if (this.cursor.up.isDown) {
         this.player.continueJump();
       }
       if (this.dropkey.isDown) {
         this.dropItem();
+        this.sfx.pickup.play();
       }
       if (this.fireButton.isDown) {
         switch (_config2.default.state.equipped) {
@@ -5203,13 +5228,17 @@ var _class = function (_Phaser$State) {
               _config2.default.state.rescued = true;
               _config2.default.state.rescueTime = 15.0;
               this.setMessageText("congrats!\nyou have been rescued");
+              this.sfx.win.play();
             }
             //config.state.equipped = null;
             //delete config.state.items['flaregun'];
             break;
           case 'radio':
             this.setMessageText("Hello? Can you put\nup a signal flare?");
-            _config2.default.state.rescueTime = 30.0;
+            if (_config2.default.state.rescueTime <= 0.0) {
+              _config2.default.state.rescueTime = 30.0;
+              this.sfx.noise.play();
+            }
             break;
         }
       }
