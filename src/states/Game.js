@@ -191,6 +191,8 @@ export default class extends Phaser.State {
       splash: this.game.add.audio('splash_audio')
     }
     this.player.sfx = this.sfx;
+
+    this.drytimer = 0.0;
   }
 
   spawnItem(name, x, y) {
@@ -264,8 +266,9 @@ export default class extends Phaser.State {
       }
     } else if (y.props.type == "fire") {
       if (this.spacebar.isDown) {
+        if (!this.fire.lit)
+          this.sfx.fire.play();
 	this.ignite();
-        this.sfx.fire.play();
       }
     }
 
@@ -379,9 +382,13 @@ export default class extends Phaser.State {
       var tiles = layer.getTiles(this.player.x - 16, this.player.y - 16 - this.player.height / 2.0, 32, 32);
       this.player.underwater = tiles.filter((x) => x.index != -1).length > 0;
     }
-    if (inwater != this.player.underwater && this.player.body.velocity.y > 100.0) {
+    if (inwater != this.player.underwater && this.drytimer > 0.25) {
       this.sfx.splash.play();
     }
+    if (this.player.underwater)
+      this.drytimer = 0.0;
+    else
+      this.drytimer += dt;
 
     game.physics.arcade.overlap(this.player, this.items, this.trigger, null, this);
     game.physics.arcade.overlap(this.player, this.map.triggers, this.trigger, null, this);
