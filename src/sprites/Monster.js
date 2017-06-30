@@ -4,7 +4,7 @@ import config from '../config'
 export default class extends Phaser.Sprite {
   constructor ({ game, x, y, name }) {
     var info = config.monsters.mummy;
-    super(game, x, y, info.asset.key)
+    super(game, x, y, "zombie")
     this.info = info;
     game.physics.arcade.enable(this);
     this.body.collideWorldBounds = true;
@@ -13,22 +13,14 @@ export default class extends Phaser.Sprite {
     this.game.scaleModel = Phaser.ScaleManager.SHOW_ALL;
     this.scale.setTo(this.info.scale);
     this.direction = 1;
-    this.animations.add('run');
+    var framenames = Phaser.Animation.generateFrameNames('Walk', 1, 6, '.png');
+    this.animations.add('run', framenames, 10, true, false);
     var h = this.body.height * 0.6;
     this.body.setSize(this.body.width * 0.8, h, 0, this.body.height - h);
+    this.animations.play('run');
   }
 
   update () {
-    if (this.body.blocked.down) {
-      if (this.body.velocity.x != 0.0) {
-	this.walkAnimation();
-      } else {
-	this.stopAnimation();
-      }
-    } else {
-      this.freefallAnimation();
-    }
-
     if (this.body.blocked.left) {
       this.direction = -1;
     } else if (this.body.blocked.right) {
@@ -72,6 +64,7 @@ export default class extends Phaser.Sprite {
   }
 
   walkAnimation() {
+    console.log("walking");
     this.animations.play('run');
   }
 

@@ -24,12 +24,13 @@ export default class extends Phaser.State {
     for (var key in config.sounds) {
       this.load.audio(key, config.sounds[key]);
     }
-
-    this.load.spritesheet('ms', 'assets/images/metalslug_mummy37x45.png', 37, 45, 18);
+    
+    this.load.atlasJSONHash('zombie', 'assets/images/zombie.png', 'assets/images/zombie.json');
+    this.load.atlasJSONHash('hero', 'assets/images/hero.png', 'assets/images/hero.json');
     this.load.spritesheet('fire', 'assets/images/fire.png', 64, 64, 4);
-    var result = this.load.atlasJSONHash('hero', 'assets/images/hero.png', 'assets/images/hero.json');
 
     config.state = JSON.parse(config.initial_state);
+
   }
 
   create () {
