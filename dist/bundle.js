@@ -488,8 +488,6 @@ exports.default = {
     wave_audio: 'assets/sounds/waves.ogg',
     cave_audio: 'assets/sounds/cave.ogg',
     jump_audio: 'assets/sounds/jump.mp3',
-    monster1_audio: 'assets/sounds/monster1.mp3',
-    monster2_audio: 'assets/sounds/monster2.mp3',
     death_audio: 'assets/sounds/death.mp3',
     win_audio: 'assets/sounds/win.wav',
     pickup_audio: 'assets/sounds/pickup.mp3',
@@ -4363,7 +4361,7 @@ var _class = function (_Phaser$Sprite) {
 
     var info = _config2.default.monsters.mummy;
 
-    var _this = _possibleConstructorReturn(this, (_class.__proto__ || Object.getPrototypeOf(_class)).call(this, game, x, y, info.asset.key));
+    var _this = _possibleConstructorReturn(this, (_class.__proto__ || Object.getPrototypeOf(_class)).call(this, game, x, y, "zombie"));
 
     _this.info = info;
     game.physics.arcade.enable(_this);
@@ -4373,25 +4371,17 @@ var _class = function (_Phaser$Sprite) {
     _this.game.scaleModel = _phaser2.default.ScaleManager.SHOW_ALL;
     _this.scale.setTo(_this.info.scale);
     _this.direction = 1;
-    _this.animations.add('run');
+    var framenames = _phaser2.default.Animation.generateFrameNames('Walk', 1, 6, '.png');
+    _this.animations.add('run', framenames, 10, true, false);
     var h = _this.body.height * 0.6;
     _this.body.setSize(_this.body.width * 0.8, h, 0, _this.body.height - h);
+    _this.animations.play('run');
     return _this;
   }
 
   _createClass(_class, [{
     key: 'update',
     value: function update() {
-      if (this.body.blocked.down) {
-        if (this.body.velocity.x != 0.0) {
-          this.walkAnimation();
-        } else {
-          this.stopAnimation();
-        }
-      } else {
-        this.freefallAnimation();
-      }
-
       if (this.body.blocked.left) {
         this.direction = -1;
       } else if (this.body.blocked.right) {
@@ -4433,6 +4423,7 @@ var _class = function (_Phaser$Sprite) {
   }, {
     key: 'walkAnimation',
     value: function walkAnimation() {
+      console.log("walking");
       this.animations.play('run');
     }
   }, {
@@ -4983,7 +4974,6 @@ var _class = function (_Phaser$State) {
         music = this.map.properties.music;
       }
       if (game.music[music] == null) {
-        console.log('loading ' + music);
         game.music[music] = this.game.add.audio(music);
         game.music[music].play('', 0, 0.0, true);
       }
@@ -4993,7 +4983,6 @@ var _class = function (_Phaser$State) {
       }
       if (music) {
         game.music[music].play('', 0, 1.0, true);
-        console.log('playing ' + music);
       }
 
       // sound effects
@@ -5001,8 +4990,6 @@ var _class = function (_Phaser$State) {
         win: this.game.add.audio('win_audio'),
         jump: this.game.add.audio('jump_audio'),
         death: this.game.add.audio('death_audio'),
-        monster1: this.game.add.audio('monster1_audio'),
-        monster2: this.game.add.audio('monster2_audio'),
         pickup: this.game.add.audio('pickup_audio'),
         fire: this.game.add.audio('fire_audio'),
         noise: this.game.add.audio('noise_audio'),
@@ -5487,9 +5474,9 @@ var _class = function (_Phaser$State) {
         this.load.audio(key, _config2.default.sounds[key]);
       }
 
-      this.load.spritesheet('ms', 'assets/images/metalslug_mummy37x45.png', 37, 45, 18);
+      this.load.atlasJSONHash('zombie', 'assets/images/zombie.png', 'assets/images/zombie.json');
+      this.load.atlasJSONHash('hero', 'assets/images/hero.png', 'assets/images/hero.json');
       this.load.spritesheet('fire', 'assets/images/fire.png', 64, 64, 4);
-      var result = this.load.atlasJSONHash('hero', 'assets/images/hero.png', 'assets/images/hero.json');
 
       _config2.default.state = JSON.parse(_config2.default.initial_state);
     }

@@ -172,7 +172,6 @@ export default class extends Phaser.State {
       music = this.map.properties.music;
     }
     if (game.music[music] == null) {
-      console.log('loading ' + music);
       game.music[music] = this.game.add.audio(music);
       game.music[music].play('', 0, 0.0, true);
     }
@@ -183,7 +182,6 @@ export default class extends Phaser.State {
     }
     if (music) {
       game.music[music].play('', 0, 1.0, true);
-      console.log('playing ' + music);
     }
 
     // sound effects
@@ -191,8 +189,6 @@ export default class extends Phaser.State {
       win: this.game.add.audio('win_audio'),
       jump: this.game.add.audio('jump_audio'),
       death: this.game.add.audio('death_audio'),
-      monster1: this.game.add.audio('monster1_audio'),
-      monster2: this.game.add.audio('monster2_audio'),
       pickup: this.game.add.audio('pickup_audio'),
       fire: this.game.add.audio('fire_audio'),
       noise: this.game.add.audio('noise_audio'),
