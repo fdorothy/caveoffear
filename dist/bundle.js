@@ -11342,7 +11342,7 @@ module.exports = __webpack_require__(/*! ./modules/_core */ 26);
 /***/ (function(module, exports, __webpack_require__) {
 
 __webpack_require__(/*! babel-polyfill */122);
-module.exports = __webpack_require__(/*! /Users/fredricdorothy/personal/games/caveoffear/src/main.js */121);
+module.exports = __webpack_require__(/*! /Users/fredricdorothy/work/phaser/caveoffear/src/main.js */121);
 
 
 /***/ })

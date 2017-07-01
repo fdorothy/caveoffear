@@ -15,7 +15,10 @@
             margin: 0;
             padding: 0;
             background-color: #000;
-        }
+	    color: #fff;
+	    text-align: left;
+	    vertical-align: text-top;
+       }
         #content {
           width: 100%;
         //height: 100%;
@@ -25,9 +28,29 @@
 
 <body>
 
+  <h2></h2>
     <div id="content"></div>
     <script src="dist/vendor.bundle.js"></script>
     <script src="dist/bundle.js"></script>
+    <table>
+      <tr>
+	<th valign="top">
+	  <h2>Controls</h2>
+	  <ul>
+	    <li>arrow keys: movement / jump</li>
+	    <li>spacebar: open door, pickup item, ignite fire</li>
+	    <li>enter: use equipped item</li>
+	    <li>D: drop equipped item</li>
+	  </ul>
+	</th>
+	<th width=75% valign="top">
+	  <h2>Story</h2>
+	  <p>You have become stranded on an island, and you sure would like to get out! There are some
+	    caves nearby with eerie moans emananting from the entrances. Maybe you can find a flare
+	    gun or a radio nearby to call for help.
+	  </p>
+      </tr>
+    </table>
 
 </body>
 
