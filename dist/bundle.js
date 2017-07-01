@@ -5172,10 +5172,12 @@ var _class = function (_Phaser$State) {
       if (this.bullet) {
         this.flareemitter.x = this.bullet.x;
         this.flareemitter.y = this.bullet.y;
-        var vx = this.bullet.body.velocity.x;
-        var vy = this.bullet.body.velocity.y;
-        this.flareemitter.setXSpeed((vx - 20) / 10.0, (vx + 20) / 20.0);
-        this.flareemitter.setYSpeed((vy - 20) / 10.0, (vy + 20) / 20.0);
+        if (this.bullet.body) {
+          var vx = this.bullet.body.velocity.x;
+          var vy = this.bullet.body.velocity.y;
+          this.flareemitter.setXSpeed((vx - 20) / 10.0, (vx + 20) / 20.0);
+          this.flareemitter.setYSpeed((vy - 20) / 10.0, (vy + 20) / 20.0);
+        }
       }
 
       // set our message text to center of screen
