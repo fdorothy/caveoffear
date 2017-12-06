@@ -28,15 +28,15 @@ export default class extends Phaser.Sprite {
     if (this.body.blocked.down || this.underwater) {
       var vx = this.body.velocity.x;
       if (vx < -1.0 || vx > 1.0) {
-    	this.walkAnimation();
+        this.walkAnimation();
       } else {
-    	this.stopAnimation();
+        this.stopAnimation();
       }
     } else {
       if (this.jumping) {
-	this.jumpAnimation();
+        this.jumpAnimation();
       } else {
-	this.freefallAnimation();
+        this.freefallAnimation();
       }
     }
 
@@ -126,11 +126,11 @@ export default class extends Phaser.Sprite {
     if (vx < 0) {
       vx += config.player.groundDeaccel * dt;
       if (vx > 0)
-	vx = 0;
+        vx = 0;
     } else if (vx > 0) {
       vx -= config.player.groundDeaccel * dt;
       if (vx < 0)
-	vx = 0;
+        vx = 0;
     }
     if (vx < config.player.initialSpeed && vx > -config.player.initialSpeed) {
       vx = 0;

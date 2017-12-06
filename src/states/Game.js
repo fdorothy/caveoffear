@@ -91,24 +91,24 @@ export default class extends Phaser.State {
     for (var key in config.state.items) {
       var obj = config.state.items[key];
       if (obj != "equipped" && obj.map == this.map.asset) {
-       	this.spawnItem(key, obj.x, obj.y);
+        this.spawnItem(key, obj.x, obj.y);
       }
     }
     for (var key in this.map.allObjects) {
       var obj = this.map.allObjects[key];
       if (obj.type == "item_spawn") {
-	if (config.state.items[obj.name] == null) {
-	  this.spawnItem(obj.name, obj.x + obj.width/2.0, obj.y+obj.height/2.0);
-	}
+        if (config.state.items[obj.name] == null) {
+          this.spawnItem(obj.name, obj.x + obj.width/2.0, obj.y+obj.height/2.0);
+        }
       } else if (obj.type == "fire_spawn") {
-	this.fire = new Fire({
-	  game: this.game,
-	  x: obj.x + obj.width / 2.0,
-	  y: obj.y + obj.height*1.1,
-	});
-	if (config.state.fires[config.state.map])
-	  this.ignite();
-	this.items.add(this.fire);
+        this.fire = new Fire({
+          game: this.game,
+          x: obj.x + obj.width / 2.0,
+          y: obj.y + obj.height*1.1,
+        });
+        if (config.state.fires[config.state.map])
+          this.ignite();
+        this.items.add(this.fire);
       }
     }
     this.dark = !config.state.fires[config.state.map];
@@ -135,16 +135,16 @@ export default class extends Phaser.State {
       this.monsters = new Phaser.Group(this.game);
       this.map.spriteLayer.add(this.monsters);
       for (var key in this.map.allObjects) {
-	var monster = this.map.allObjects[key];
-	if (monster.type == "monster") {
-	  var sprite = new Monster({
-	    game: this.game,
-	    x: monster.x + monster.width / 2.0,
-	    y: monster.y + monster.height / 2.0,
-	    info: monster.properties
-	  });
-	  this.monsters.add(sprite);
-	}
+        var monster = this.map.allObjects[key];
+        if (monster.type == "monster") {
+          var sprite = new Monster({
+            game: this.game,
+            x: monster.x + monster.width / 2.0,
+            y: monster.y + monster.height / 2.0,
+            info: monster.properties
+          });
+          this.monsters.add(sprite);
+        }
       }
     }
 
@@ -262,17 +262,17 @@ export default class extends Phaser.State {
       this.warp(y.props.properties);
     } else if (y.props.type == "item") {
       if (this.spacebar.isDown) {
-	this.pickupItem(y);
+        this.pickupItem(y);
       }
     } else if (y.props.type == "door") {
       if (this.spacebar.isDown) {
-	this.warp(y.props.properties);
+        this.warp(y.props.properties);
       }
     } else if (y.props.type == "fire") {
       if (this.spacebar.isDown) {
         if (!this.fire.lit)
           this.sfx.fire.play();
-	this.ignite();
+        this.ignite();
       }
     }
 
@@ -280,9 +280,9 @@ export default class extends Phaser.State {
     if (y.props.properties) {
       var tooltip = y.props.properties.tooltip;
       if (tooltip != null) {
-	this.tooltip.text = tooltip;
-	this.tooltip.x = (y.left + y.right) / 2.0;
-	this.tooltip.y = y.bottom - 64;
+        this.tooltip.text = tooltip;
+        this.tooltip.x = (y.left + y.right) / 2.0;
+        this.tooltip.y = y.bottom - 64;
       }
     }
   }
@@ -312,7 +312,7 @@ export default class extends Phaser.State {
   getEntranceXY(entrance_name) {
     var entrance = this.map.objectMap[entrance_name];
     return [entrance.x+entrance.width/2.0,
-	    entrance.y+entrance.height/2.0]
+            entrance.y+entrance.height/2.0]
   }
 
   pushPlatformPhysics(sprite) {
@@ -466,9 +466,9 @@ export default class extends Phaser.State {
   updateShadowTexture() {
     if (this.dark) {
       if (!this.map.properties.dark) {
-	this.shadowTexture.context.fillStyle = 'rgb(100, 100, 100)';
+        this.shadowTexture.context.fillStyle = 'rgb(100, 100, 100)';
       } else {
-	this.shadowTexture.context.fillStyle = 'rgb(10, 10, 10)';
+        this.shadowTexture.context.fillStyle = 'rgb(10, 10, 10)';
       }
     } else {
       this.shadowTexture.context.fillStyle = 'rgb(128, 128, 128)';

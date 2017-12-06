@@ -15,7 +15,7 @@ export default class extends Phaser.State {
   preload () {
     WebFont.load({
       google: {
-	families: ['Belgrano']
+        families: ['Belgrano']
       },
       active: this.fontsLoaded
     });
