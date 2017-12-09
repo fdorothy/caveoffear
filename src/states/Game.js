@@ -399,7 +399,7 @@ export default class extends Phaser.State {
     game.physics.arcade.overlap(this.player, this.items, this.trigger, null, this);
     game.physics.arcade.overlap(this.player, this.map.triggers, this.trigger, null, this);
     game.physics.arcade.overlap(this.player, this.monsters, (x, y) => {
-      this.sfx.death.play();
+      this.sfx.death.play('', 0, 0.1);
       this.state.start("GameOver");
     }, null, this);
     var blocked = this.player.body.blocked.down;
