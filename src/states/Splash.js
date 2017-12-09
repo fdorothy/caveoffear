@@ -1,5 +1,4 @@
 import Phaser from 'phaser'
-import { centerGameObjects } from '../utils'
 import config from '../config'
 
 export default class extends Phaser.State {
@@ -7,8 +6,9 @@ export default class extends Phaser.State {
 
   preload () {
     this.loaderBg = this.add.sprite(this.game.world.centerX, this.game.world.centerY, 'loaderBg')
+    this.loaderBg.anchor.set(0.5, 0.5);
     this.loaderBar = this.add.sprite(this.game.world.centerX, this.game.world.centerY, 'loaderBar')
-    centerGameObjects([this.loaderBg, this.loaderBar])
+    this.loaderBar.anchor.set(0.5, 0.5);
 
     this.load.setPreloadSprite(this.loaderBar)
 
